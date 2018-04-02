@@ -1,0 +1,44 @@
+{
+  "name": "easymock",
+  "displayName": "EasyMock",
+  "description": "easymock",
+  "version": "0.0.1",
+  "publisher": "EasyMock",
+  "engines": {
+    "vscode": "^1.21.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": [
+    "onCommand:extension.runMcok",
+    "onCommand:extension.stopMcok"
+  ],
+  "main": "./src/index",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.runMcok",
+        "title": "Run EasyMock"
+      },
+      {
+        "command": "extension.stopMcok",
+        "title": "Stop EasyMock"
+      }
+    ]
+  },
+  "scripts": {
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.42",
+    "@types/node": "^7.0.43",
+    "body-parser": "^1.18.2",
+    "chalk": "^2.3.2",
+    "eslint": "^4.11.0",
+    "express": "^4.16.3",
+    "express-http-proxy": "^1.1.0",
+    "glob": "^7.1.2",
+    "typescript": "^2.6.1",
+    "vscode": "^1.1.6"
+  }
+}
