@@ -2,8 +2,12 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require("vscode");
 const path = require("path");
+const fs = require("fs");
 const watch = require("./watch");
 const utils = require("./utils");
+const server = require("./server");
+const mock = require("./mock");
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -26,19 +30,21 @@ function activate(context) {
         return;
       }
       utils.showInfo(rootPath);
-      utils.showInfo("aaaaaaaaa");
-      const watcher = watch(path.join(rootPath, "mock/*.js")).on(
-        "change delete",
-        uri => console.log(uri)
-      );
+      const mockPath = path.join(rootPath, "mock");
+      if (!fs.existsSync(mockPath)) {
+        fs.mkdirSync(mockPath);
+      }
 
-      utils.showInput("enter port (8999):").then((port = 8999) => {});
+      utils.showInput("enter port (8999):").then((port = 8999) => {
+        server.start(9999).then(mock);
+      });
     })
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand("extension.stopMcok", function() {
       if (!running) return;
+      server.stop();
       running = false;
     })
   );

@@ -1,17 +1,18 @@
 const express = require("express");
 const utils = require("./utils");
 
-let _server = null;
+let _server = null,
+  app = null;
 
 function start(port) {
-  const app = express();
+  app = express();
   app.use(express.static(utils.getWorkspaceRoot()));
   app.use(corsMiddleware());
   return new Promise((resolve, reject) => {
     _server = app
       .listen(port, () => {
         utils.log(`Mock Server started`);
-        resolve(_server);
+        resolve(app);
       })
       .on("error", error => {
         utils.showError(`Failed to start Mock Server due to ${error.message}`);
@@ -32,6 +33,7 @@ function stop() {
       resolve();
     });
     _server = null;
+    app = null;
   });
 }
 
