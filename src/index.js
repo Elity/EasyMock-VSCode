@@ -23,19 +23,19 @@ function activate(context) {
   context.subscriptions.push(
     vscode.commands.registerCommand("extension.runMcok", function() {
       if (running) return;
-      running = true;
       const rootPath = utils.getWorkspaceRoot();
       if (!rootPath) {
         utils.showError("Can't find workspace folder!");
         return;
       }
-      utils.showInfo(rootPath);
       const mockPath = path.join(rootPath, "mock");
       if (!fs.existsSync(mockPath)) {
         fs.mkdirSync(mockPath);
       }
 
       utils.showInput("enter port (8999):").then((port = 8999) => {
+        //utils.showInfo(rootPath);
+        running = true;
         server.start(9999).then(mock);
       });
     })

@@ -13,6 +13,11 @@ const MOCK_DIR = join(utils.getWorkspaceRoot(), "mock");
 const MOCK_FILES = join(MOCK_DIR, "*.js");
 
 function getConfig() {
+  Object.keys(require.cache).forEach(file => {
+    if (~file.indexOf(MOCK_DIR)) {
+      delete require.cache[file];
+    }
+  });
   let config = {};
   glob.sync(MOCK_FILES).forEach(file => {
     Object.assign(config, require(file));
