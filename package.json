@@ -8,6 +8,7 @@
   "engines": {
     "vscode": "^1.21.0"
   },
+  "icon": "asset/icon.png",
   "keywords": ["mock", "easy mock", "mock server"],
   "categories": ["Other"],
   "activationEvents": [
