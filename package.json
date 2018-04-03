@@ -17,11 +17,13 @@
     "commands": [
       {
         "command": "extension.runMcok",
-        "title": "Run EasyMock"
+        "title": "Run EasyMock",
+        "category": "EasyMock"
       },
       {
         "command": "extension.stopMcok",
-        "title": "Stop EasyMock"
+        "title": "Stop EasyMock",
+        "category": "EasyMock"
       }
     ],
     "configuration": {
