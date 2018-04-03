@@ -35,3 +35,15 @@ exports.showInput = function(prompt) {
     prompt
   });
 };
+
+exports.getPort = function() {
+  return getConfig("serverPort") || 9999;
+};
+
+exports.getMockFolder = function() {
+  return getConfig("mockFolderName") || "mock";
+};
+
+function getConfig(configName) {
+  vscode.workspace.getConfiguration("EasyMock").get(configName);
+}

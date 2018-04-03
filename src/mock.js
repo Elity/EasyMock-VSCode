@@ -9,7 +9,7 @@ const watch = require("./watch");
 const utils = require("./utils");
 const { join, resolve } = path;
 
-const MOCK_DIR = join(utils.getWorkspaceRoot(), "mock");
+const MOCK_DIR = join(utils.getWorkspaceRoot(), utils.getMockFolder());
 const MOCK_FILES = join(MOCK_DIR, "*.js");
 
 function getConfig() {
@@ -20,7 +20,11 @@ function getConfig() {
   });
   let config = {};
   glob.sync(MOCK_FILES).forEach(file => {
-    Object.assign(config, require(file));
+    try {
+      Object.assign(config, require(file));
+    } catch (e) {
+      utils.log("Error:" + e.message + ",at " + file);
+    }
   });
   return config;
 }

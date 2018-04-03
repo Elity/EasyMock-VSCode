@@ -23,29 +23,36 @@ function activate(context) {
   context.subscriptions.push(
     vscode.commands.registerCommand("extension.runMcok", function() {
       if (running) return;
+      running = true;
       const rootPath = utils.getWorkspaceRoot();
       if (!rootPath) {
         utils.showError("Can't find workspace folder!");
         return;
       }
-      const mockPath = path.join(rootPath, "mock");
+      const mockPath = path.join(rootPath, utils.getMockFolder());
       if (!fs.existsSync(mockPath)) {
         fs.mkdirSync(mockPath);
       }
-
-      utils.showInput("enter port (8999):").then((port = 8999) => {
-        //utils.showInfo(rootPath);
-        running = true;
-        server.start(9999).then(mock);
-      });
+      server
+        .start()
+        .then(mock)
+        .catch(() => {
+          running = false;
+          utils.showError("Mock Server start fail!");
+        });
     })
   );
 
   context.subscriptions.push(
     vscode.commands.registerCommand("extension.stopMcok", function() {
       if (!running) return;
-      server.stop();
-      running = false;
+      server
+        .stop()
+        .then(() => {
+          utils.showInfo("Mock Server have been stopped!");
+          running = false;
+        })
+        .catch(err => utils.log(err));
     })
   );
 }

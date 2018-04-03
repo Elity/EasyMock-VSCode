@@ -1,8 +1,8 @@
 {
   "name": "easymock",
   "displayName": "EasyMock",
-  "description": "easymock",
-  "version": "0.0.1",
+  "description": "a simple mock extention",
+  "version": "1.0.0",
   "publisher": "EasyMock",
   "engines": {
     "vscode": "^1.21.0"
@@ -23,7 +23,23 @@
         "command": "extension.stopMcok",
         "title": "Stop EasyMock"
       }
-    ]
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Easy Mock configuration",
+      "properties": {
+        "EasyMock.serverPort": {
+          "type": "number",
+          "default": 9999,
+          "description": "Set mock server port"
+        },
+        "EasyMock.mockFolderName": {
+          "type": "string",
+          "default": "mock",
+          "description": "Specifies the mock folder name in your workspace"
+        }
+      }
+    }
   },
   "scripts": {
     "postinstall": "node ./node_modules/vscode/bin/install",
