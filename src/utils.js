@@ -39,12 +39,16 @@ exports.showInput = function(prompt) {
 };
 
 exports.getPort = function() {
-  return getConfig("serverPort") || 9999;
+  return getConfig("serverPort");
 };
 
 exports.getMockFolder = function() {
-  return getConfig("mockFolderName") || "mock";
+  return getConfig("mockFolderName");
 };
+
+function getConfig(configName) {
+  return vscode.workspace.getConfiguration("EasyMock").get(configName);
+}
 
 exports.setExample = function(mockPath) {
   fs.writeFileSync(
@@ -77,7 +81,3 @@ module.exports = {
     `
   );
 };
-
-function getConfig(configName) {
-  vscode.workspace.getConfiguration("EasyMock").get(configName);
-}
