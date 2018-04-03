@@ -1,12 +1,14 @@
 {
   "name": "easymock",
   "displayName": "EasyMock",
-  "description": "a simple mock extention",
+  "description": "a simple mock server",
   "version": "1.0.0",
   "publisher": "EasyMock",
+  "license": "MIT",
   "engines": {
     "vscode": "^1.21.0"
   },
+  "keywords": ["mock", "easy mock", "mock server"],
   "categories": ["Other"],
   "activationEvents": [
     "onCommand:extension.runMcok",
@@ -47,13 +49,19 @@
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "node ./node_modules/vscode/bin/test"
   },
-  "devDependencies": {
-    "@types/mocha": "^2.2.42",
-    "@types/node": "^7.0.43",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Elity/EasyMock.git"
+  },
+  "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "express-http-proxy": "^1.1.0",
-    "glob": "^7.1.2",
+    "glob": "^7.1.2"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.42",
+    "@types/node": "^7.0.43",
     "typescript": "^2.6.1",
     "vscode": "^1.1.6"
   }
