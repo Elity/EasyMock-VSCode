@@ -31,10 +31,14 @@ function activate(context) {
       const mockPath = path.join(rootPath, utils.getMockFolder());
       if (!fs.existsSync(mockPath)) {
         fs.mkdirSync(mockPath);
+        utils.setExample(mockPath);
       }
       server
         .start()
-        .then(mock.applyMock)
+        .then(app => {
+          mock.applyMock(app);
+          utils.showInfo("Mock Server started!");
+        })
         .catch(() => {
           running = false;
           utils.showError("Mock Server start fail!");
