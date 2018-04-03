@@ -35,7 +35,7 @@ function activate(context) {
       }
       server
         .start()
-        .then(mock)
+        .then(mock.applyMock)
         .catch(() => {
           running = false;
           utils.showError("Mock Server start fail!");
@@ -50,6 +50,7 @@ function activate(context) {
         .stop()
         .then(() => {
           utils.showInfo("Mock Server have been stopped!");
+          mock.stopWatcher();
           running = false;
         })
         .catch(err => utils.log(err));

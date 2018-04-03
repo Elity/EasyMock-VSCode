@@ -12,6 +12,8 @@ const { join, resolve } = path;
 const MOCK_DIR = join(utils.getWorkspaceRoot(), utils.getMockFolder());
 const MOCK_FILES = join(MOCK_DIR, "*.js");
 
+let watcher = null;
+
 function getConfig() {
   Object.keys(require.cache).forEach(file => {
     if (~file.indexOf(MOCK_DIR)) {
@@ -88,7 +90,7 @@ function realApplyMock(app) {
     }
   });
 
-  const watcher = watch(MOCK_FILES).on("change delete", ({ fsPath }) => {
+  watcher = watch(MOCK_FILES).on("change delete", ({ fsPath }) => {
     utils.log(`File changed:${fsPath}`);
     watcher.close();
     app._router.stack.splice(lastIndex + 1);
@@ -112,7 +114,7 @@ function applyMock(app) {
     realApplyMock(app);
   } catch (e) {
     utils.log(e);
-    const watcher = watch(MOCK_FILES).on("change delete", ({ fsPath }) => {
+    watcher = watch(MOCK_FILES).on("change delete", ({ fsPath }) => {
       utils.log("File changed", fsPath);
       watcher.close();
       applyMock(app);
@@ -120,4 +122,8 @@ function applyMock(app) {
   }
 }
 
-module.exports = applyMock;
+function stopWatcher() {
+  watcher && watcher.close && watcher.close();
+}
+
+module.exports = { applyMock, stopWatcher };
