@@ -7,13 +7,13 @@ const watch = require("./watch");
 const utils = require("./utils");
 const server = require("./server");
 const mock = require("./mock");
+const lang = require("./lang");
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
   // Use the console to output diagnostic information (console.log) and errors (console.error)
   // This line of code will only be executed once when your extension is activated
-  console.log('Congratulations, your extension "easymock" is now active!');
 
   let running = false;
   // The command has been defined in the package.json file
@@ -25,23 +25,24 @@ function activate(context) {
       running = true;
       const rootPath = utils.getWorkspaceRoot();
       if (!rootPath) {
-        utils.showError("Can't find workspace folder!");
+        utils.showError(lang.noWorkspace);
         return;
       }
       const mockPath = path.join(rootPath, utils.getMockFolder());
       if (!fs.existsSync(mockPath)) {
         fs.mkdirSync(mockPath);
         utils.setExample(mockPath);
+        utils.showInfo(lang.createMockFolder);
       }
       server
         .start()
         .then(app => {
           mock.applyMock(app);
-          utils.showInfo("Mock Server started!");
+          utils.showInfo(lang.startSuccess);
         })
         .catch(() => {
           running = false;
-          utils.showError("Mock Server start fail!");
+          utils.showError(lang.startFail);
         });
     })
   );
@@ -52,7 +53,7 @@ function activate(context) {
       server
         .stop()
         .then(() => {
-          utils.showInfo("Mock Server have been stopped!");
+          utils.showInfo(lang.stopSuccess);
           mock.stopWatcher();
           running = false;
         })
