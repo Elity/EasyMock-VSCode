@@ -20,7 +20,7 @@ function activate(context) {
   // Now provide the implementation of the command with  registerCommand
   // The commandId parameter must match the command field in package.json
   context.subscriptions.push(
-    vscode.commands.registerCommand("extension.runMcok", function() {
+    vscode.commands.registerCommand("easymock.runMcok", function() {
       if (running) return;
       running = true;
       const rootPath = utils.getWorkspaceRoot();
@@ -48,7 +48,7 @@ function activate(context) {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("extension.stopMcok", function() {
+    vscode.commands.registerCommand("easymock.stopMcok", function() {
       if (!running) return;
       server
         .stop()

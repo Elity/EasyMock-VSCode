@@ -12,19 +12,19 @@
   "keywords": ["mock", "easy mock", "mock server"],
   "categories": ["Other"],
   "activationEvents": [
-    "onCommand:extension.runMcok",
-    "onCommand:extension.stopMcok"
+    "onCommand:easymock.runMcok",
+    "onCommand:easymock.stopMcok"
   ],
   "main": "./src/index",
   "contributes": {
     "commands": [
       {
-        "command": "extension.runMcok",
+        "command": "easymock.runMcok",
         "title": "Run EasyMock",
         "category": "EasyMock"
       },
       {
-        "command": "extension.stopMcok",
+        "command": "easymock.stopMcok",
         "title": "Stop EasyMock",
         "category": "EasyMock"
       }
@@ -48,7 +48,8 @@
   },
   "scripts": {
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "node ./node_modules/vscode/bin/test"
+    "pack": "vsce package",
+    "localinstall": "code --install-extension easymock-1.0.0.vsix"
   },
   "repository": {
     "type": "git",
