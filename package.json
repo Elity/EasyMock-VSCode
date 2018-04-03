@@ -1,9 +1,10 @@
 {
   "name": "easymock",
-  "displayName": "EasyMock",
+  "displayName": "EasyMock - Mock server",
   "description": "a simple mock server",
   "version": "1.0.0",
   "publisher": "EasyMock",
+  "author": "Fighting",
   "license": "MIT",
   "engines": {
     "vscode": "^1.21.0"
