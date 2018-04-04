@@ -105,7 +105,10 @@ function parseKey(key) {
   }
   return { method, path };
 }
-
+/**
+ * 新建mock文件时，向里面写入导出语句模版
+ * @param {*} filePath
+ */
 function initMockFile(filePath) {
   if (!fs.readFileSync(filePath, { encoding: "utf8" })) {
     fs.writeFileSync(

@@ -65,7 +65,7 @@ module.exports = {
         message: 'success',
         status: 0
     },
-    // 可以写成function得形式，从而可以根据请求参数定制响应数据
+    // 可以写成function的形式，从而可以根据请求参数定制响应数据
     '/api/getOrder':function(res){
         //res.query
         //res.params
@@ -77,7 +77,8 @@ module.exports = {
     },
     // 也可以转发url到指定的服务器
     "/v2/movie/top250": "https://api.douban.com/"
-    // 引入mockjs能更随机地模拟各种数据，包括图片、段落等等
+    // 引入mockjs能循环、随机地模拟各种数据，包括图片、段落等等
+    // http://mockjs.com/examples.html
 }
     `
   );
