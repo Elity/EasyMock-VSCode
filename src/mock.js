@@ -32,12 +32,8 @@ function getConfig() {
 }
 
 function createMockHandler(method, path, value) {
-  return function mockHandler(...args) {
-    if (typeof value === "function") {
-      value(...args);
-    } else {
-      args[1].json(value);
-    }
+  return function mockHandler(req, res, next) {
+    res.json(typeof value === "function" ? value(req) : value);
   };
 }
 
@@ -114,11 +110,9 @@ function initMockFile(filePath) {
   if (!fs.readFileSync(filePath, { encoding: "utf8" })) {
     fs.writeFileSync(
       filePath,
-      `
-module.exports = {
-
-}    
-    `
+      `module.exports = {
+     
+}`
     );
   }
 }

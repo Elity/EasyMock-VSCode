@@ -66,13 +66,14 @@ module.exports = {
         status: 0
     },
     // 可以写成function得形式，从而可以根据请求参数定制响应数据
-    '/api/getOrder':function(res,req){
+    '/api/getOrder':function(res){
         //res.query
         //res.params
-        req.json({
+        //res.body
+        return {
             orderId:1214124124,
-            price: 5.9
-        }) 
+            price: Math.random()
+        }
     },
     // 也可以转发url到指定的服务器
     "/v2/movie/top250": "https://api.douban.com/"
