@@ -11,7 +11,11 @@ function watch(globPath) {
     on(eventNames, fn) {
       eventNames
         .split(/\s+/)
-        .forEach(name => name && watcher[`onDid${title(name)}`](fn));
+        .forEach(
+          name =>
+            name &&
+            watcher[`onDid${title(name)}`](fn.bind(null, name.toLowerCase()))
+        );
       return this;
     },
     close() {

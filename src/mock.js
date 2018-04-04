@@ -90,8 +90,9 @@ function realApplyMock(app) {
     }
   });
 
-  watcher = watch(MOCK_FILES).on("change delete", ({ fsPath }) => {
-    utils.log(`File changed:${fsPath}`);
+  watcher = watch(MOCK_FILES).on("change delete create", (type, { fsPath }) => {
+    utils.log(`File changed(${type}):${fsPath}`);
+    if (type === "create") initMockFile(fsPath);
     watcher.close();
     app._router.stack.splice(lastIndex + 1);
 
@@ -109,16 +110,33 @@ function parseKey(key) {
   return { method, path };
 }
 
+function initMockFile(filePath) {
+  if (!fs.readFileSync(filePath, { encoding: "utf8" })) {
+    fs.writeFileSync(
+      filePath,
+      `
+module.exports = {
+
+}    
+    `
+    );
+  }
+}
+
 function applyMock(app) {
   try {
     realApplyMock(app);
   } catch (e) {
     utils.log(e);
-    watcher = watch(MOCK_FILES).on("change delete", ({ fsPath }) => {
-      utils.log("File changed", fsPath);
-      watcher.close();
-      applyMock(app);
-    });
+    watcher = watch(MOCK_FILES).on(
+      "change delete create",
+      (type, { fsPath }) => {
+        utils.log(`File changed(${type}):${fsPath}`);
+        if (type === "create") initMockFile(fsPath);
+        watcher.close();
+        applyMock(app);
+      }
+    );
   }
 }
 
