@@ -2,7 +2,7 @@
   "name": "easymock",
   "displayName": "EasyMock - Mock server",
   "description": "a simple mock server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "EasyMock",
   "author": "Fighting",
   "license": "MIT",
@@ -10,14 +10,8 @@
     "vscode": "^1.21.0"
   },
   "icon": "asset/icon.png",
-  "keywords": [
-    "mock",
-    "easy mock",
-    "mock server"
-  ],
-  "categories": [
-    "Other"
-  ],
+  "keywords": ["mock", "easy mock", "mock server"],
+  "categories": ["Other"],
   "activationEvents": [
     "onCommand:easymock.runMcok",
     "onCommand:easymock.stopMcok"
