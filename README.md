@@ -119,13 +119,5 @@ After select `EasyMock: Run EasyMock`,to view the example file at `{workspace}/{
     "avatar": "http://dummyimage.com/100x100/f00/fff.png",
     "uuid": "8f3512d2-a86e-4008-b322-bd341c71d4ea",
     "desc": "拥须吧诗神居间物吸跳场少是卫系听满间场歌。"
-}
-
-{
-'data|3':[{
-    id:'@id',
-    'age|18-50':0,
-    'name':'@str(5,10)'
-    }]
-}
+}  
 ```
