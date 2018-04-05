@@ -33,7 +33,12 @@ function getConfig() {
 
 function createMockHandler(method, path, value) {
   return function mockHandler(req, res, next) {
-    res.json(typeof value === "function" ? value(req) : value);
+    let data = typeof value === "function" ? value(req) : value;
+    if (utils.isEnableMockParse()) {
+      let mockParse = require("./parse");
+      data = mockParse(data);
+    }
+    res.json(data);
   };
 }
 

@@ -46,6 +46,10 @@ exports.getMockFolder = function() {
   return getConfig("mockFolderName");
 };
 
+exports.isEnableMockParse = function() {
+  return getConfig("mockParse");
+};
+
 function getConfig(configName) {
   return vscode.workspace.getConfiguration("EasyMock").get(configName);
 }

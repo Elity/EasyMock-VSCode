@@ -43,6 +43,11 @@
           "type": "string",
           "default": "mock",
           "description": "Specifies the mock folder name in your workspace"
+        },
+        "EasyMock.mockParse": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable build-in mock parse"
         }
       }
     }
