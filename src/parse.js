@@ -68,7 +68,7 @@ const fns = {
       ("00000" + ((0xffffff * Math.random() + 1) | 0).toString(16)).slice(-6)
     );
   },
-  time(future) {
+  time(future = false) {
     return future
       ? randomInt(
           24 * 60 * 60 * 1000 + new Date(),

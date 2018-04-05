@@ -97,7 +97,7 @@ After select `EasyMock: Run EasyMock`,to view the example file at `{workspace}/{
 * `num(min = 0, max = 999999999, digit)` random number
 * `img(w = 100, h = 100, bg, fg, format, text)` generate image url
 * `color()` random hex color
-* `time(future)` random timestamp
+* `time(future=false)` random timestamp
 * `uuid()` random uuid
 * `inc(init)` increament integer
 * `paragraph(min = 1, max = 5)` generate paragraph
