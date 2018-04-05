@@ -96,7 +96,7 @@ const fns = {
 };
 
 /**
- * 获取形如：arr|1-10.2-5的描述信息
+ * 获取形如：arr|1-10.2-5的key的描述信息
  * @param {*} key
  * @returns {object} {name:'arr',min:1,max:10,dmin:2,dmax:5}
  */
