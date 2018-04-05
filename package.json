@@ -2,7 +2,7 @@
   "name": "easymock",
   "displayName": "EasyMock - Mock server",
   "description": "a simple mock server",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "EasyMock",
   "author": "Fighting",
   "license": "MIT",
