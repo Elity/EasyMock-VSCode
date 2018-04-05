@@ -92,16 +92,16 @@ After select `EasyMock: Run EasyMock`,to view the example file at `{workspace}/{
 
 ### build-in placeholder function
 
-* `str(min = 1, max = 10)`
-* `cstr(min = 1, max = 10)`
-* `num(min = 0, max = 999999999, digit)`
-* `img(w = 100, h = 100, bg, fg, format, text)`
-* `color()`
-* `time(future)`
-* `uuid()`
-* `inc(init)`
-* `paragraph(min = 1, max = 5)`
-* `cparagraph(min = 1, max = 5)`
+* `str(min = 1, max = 10)` random string
+* `cstr(min = 1, max = 10)` random chinese string
+* `num(min = 0, max = 999999999, digit)` random number
+* `img(w = 100, h = 100, bg, fg, format, text)` generate image url
+* `color()` random hex color
+* `time(future)` random timestamp
+* `uuid()` random uuid
+* `inc(init)` increament integer
+* `paragraph(min = 1, max = 5)` generate paragraph
+* `cparagraph(min = 1, max = 5)` generate chinese paragraph
 
 #### usage
 
