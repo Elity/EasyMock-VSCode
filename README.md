@@ -1,6 +1,6 @@
 # EasyMock
 
-A vscode extention for mock data
+A vscode extension for mock data
 
 ## Extension Settings
 
