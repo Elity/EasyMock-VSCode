@@ -2,7 +2,7 @@
   "name": "easymock",
   "displayName": "EasyMock - Mock server",
   "description": "a simple mock server",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "EasyMock",
   "author": "Fighting",
   "license": "MIT",
@@ -69,7 +69,8 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
     "express-http-proxy": "^1.1.0",
-    "glob": "^7.1.2"
+    "glob": "^7.1.2",
+    "opn": "^5.3.0"
   },
   "devDependencies": {
     "vscode": "^1.1.6"

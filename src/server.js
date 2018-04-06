@@ -1,5 +1,6 @@
 const express = require("express");
 const utils = require("./utils");
+var bodyParser = require("body-parser");
 
 let _server = null,
   app = null;
@@ -8,6 +9,9 @@ function start() {
   app = express();
   app.use(express.static(utils.getWorkspaceRoot()));
   app.use(corsMiddleware());
+  app.use(bodyParser.json({ limit: "5mb", strict: false }));
+  app.use(bodyParser.urlencoded({ extended: true, limit: "5mb" }));
+  app.use("/hello/easymock", HelloEasyMockMiddleware());
   return new Promise((resolve, reject) => {
     _server = app
       .listen(utils.getPort(), () => {
@@ -41,8 +45,14 @@ function stop() {
   });
 }
 
+function HelloEasyMockMiddleware() {
+  return function easyMock(req, res, next) {
+    res.send("<h1>Hello EasyMock!</h1>");
+  };
+}
+
 function corsMiddleware() {
-  return (req, res, next) => {
+  return function corsMiddleware(req, res, next) {
     var method =
       req.method && req.method.toUpperCase && req.method.toUpperCase();
     res.set({

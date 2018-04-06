@@ -3,7 +3,6 @@ var url = require("url");
 var path = require("path");
 var glob = require("glob");
 var assert = require("assert");
-var bodyParser = require("body-parser");
 var proxy = require("express-http-proxy");
 const watch = require("./watch");
 const utils = require("./utils");
@@ -32,7 +31,7 @@ function getConfig() {
 }
 
 function createMockHandler(method, path, value) {
-  return function mockHandler(req, res, next) {
+  return function mockHandler(req, res) {
     let data = typeof value === "function" ? value(req) : value;
     if (utils.isEnableMockParse()) {
       let mockParse = require("./parse");
@@ -60,8 +59,6 @@ function createProxy(method, path, target) {
 
 function realApplyMock(app) {
   const config = getConfig();
-  app.use(bodyParser.json({ limit: "5mb", strict: false }));
-  app.use(bodyParser.urlencoded({ extended: true, limit: "5mb" }));
 
   Object.keys(config).forEach(key => {
     const { method, path } = parseKey(key);
@@ -73,7 +70,7 @@ function realApplyMock(app) {
       `mock value of ${key} should be function or object or string, but got ${typeVal}`
     );
     if (typeVal === "string") {
-      // url转发的情形  /api/test  =>   https://www.shiguangkey.com/api/mine
+      // url转发的情形  /api/test  =>   https://www.shiguangkey.com/api/test
       if (/\(.+\)/.test(path)) {
         path = new RegExp(`^${path}$`);
       }
@@ -85,7 +82,7 @@ function realApplyMock(app) {
 
   let lastIndex = null;
   app._router.stack.some((item, index) => {
-    if (item.name === "expressInit") {
+    if (item.name === "easyMock") {
       lastIndex = index;
       return true;
     }
@@ -95,6 +92,7 @@ function realApplyMock(app) {
     utils.log(`File changed(${type}):${fsPath}`);
     if (type === "create") initMockFile(fsPath);
     watcher.close();
+    console.log(app._router);
     app._router.stack.splice(lastIndex + 1);
 
     applyMock(app);

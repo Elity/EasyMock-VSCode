@@ -8,6 +8,7 @@ const utils = require("./utils");
 const server = require("./server");
 const mock = require("./mock");
 const lang = require("./lang");
+const opn = require("opn");
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -37,6 +38,7 @@ function activate(context) {
         .start()
         .then(app => {
           mock.applyMock(app);
+          opn("http://127.0.0.1:" + utils.getPort() + "/hello/easymock");
           utils.showInfo(lang.startSuccess);
         })
         .catch(() => {

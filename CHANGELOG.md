@@ -4,6 +4,11 @@ All notable changes to the "EasyMock" extension will be documented in this file.
 
 <!-- Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file. -->
 
+## [1.0.3]
+
+* 修复 bug,优化代码
+* 增加 hello easymock 中间件
+
 ## [1.0.2]
 
 * 内建 mock 解析，并完善文档
