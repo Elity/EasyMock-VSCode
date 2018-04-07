@@ -103,15 +103,15 @@ const fns = {
 function getKeyDes(key) {
   let mc = key.match(/\|(\d+)(?:-(\d+)(?:\.(\d+)(?:-(\d+))?)?)?/);
   if (!mc) return;
-  [exp, min = 0, max = 0, dmin = 0, dmax = 0] = mc;
+  [exp, min, max, dmin, dmax] = mc;
   if (min && !max) max = min;
   if (dmin && !dmax) dmax = dmin;
   return {
     name: key.replace(exp, ""),
-    min,
-    max,
-    dmin,
-    dmax
+    min: min | 0,
+    max: max | 0,
+    dmin: dmin | 0,
+    dmax: dmax | 0
   };
 }
 
