@@ -104,4 +104,81 @@ suite("Mock Parse Tests", function() {
       .to.be.a("string")
       .with.not.equal("@num(1,10,3)");
   });
+
+  test("mock build-in function @num", function() {
+    expect(parse({ num: "@num" }).num)
+      .to.be.a("string")
+      .with.not.equal("@num");
+    expect(parse({ num: "@num(1,10)" }).num)
+      .to.be.a("string")
+      .with.not.equal("@num(1,10)");
+    expect(parse({ num: "@num(1,10,3)" }).num)
+      .to.be.a("string")
+      .with.not.equal("@num(1,10,3)");
+  });
+
+  test("mock build-in function @img", function() {
+    expect(parse({ img: "@img" }).img).to.be.equal(
+      "http://dummyimage.com/100x100"
+    );
+    expect(
+      parse({ img: "@img(200,200,'#fff','#f00','png','Hello')" }).img
+    ).to.be.equal("http://dummyimage.com/200x200/fff/f00.png&text=Hello");
+  });
+
+  test("mock build-in function @color", function() {
+    expect(parse({ color: "@color" }).color)
+      .to.be.a("string")
+      .with.not.equal("@color");
+  });
+
+  test("mock build-in function @time", function() {
+    expect(parse({ time: "@time" }).time)
+      .to.be.a("string")
+      .with.not.equal("@time");
+  });
+
+  test("mock build-in function @uuid", function() {
+    expect(parse({ uuid: "@uuid" }).uuid)
+      .to.be.a("string")
+      .with.not.equal("@uuid");
+  });
+
+  test("mock build-in function @inc", function() {
+    expect(parse({ inc: "@inc" }).inc)
+      .to.be.a("string")
+      .with.not.equal("@inc");
+
+    expect(parse({ inc: "@inc(1000)" }).inc)
+      .to.be.a("string")
+      .with.not.equal("@inc(1000)");
+  });
+
+  test("mock build-in function @paragraph", function() {
+    expect(parse({ paragraph: "@paragraph" }).paragraph)
+      .to.be.a("string")
+      .with.not.equal("@paragraph");
+
+    expect(parse({ paragraph: "@paragraph(3)" }).paragraph)
+      .to.be.a("string")
+      .with.not.equal("@paragraph(3)");
+
+    expect(parse({ paragraph: "@paragraph(3,5)" }).paragraph)
+      .to.be.a("string")
+      .with.not.equal("@paragraph(3,5)");
+  });
+
+  test("mock build-in function @cparagraph", function() {
+    expect(parse({ cparagraph: "@cparagraph" }).cparagraph)
+      .to.be.a("string")
+      .with.not.equal("@cparagraph");
+
+    expect(parse({ cparagraph: "@cparagraph(3)" }).cparagraph)
+      .to.be.a("string")
+      .with.not.equal("@cparagraph(3)");
+
+    expect(parse({ cparagraph: "@cparagraph(3,5)" }).cparagraph)
+      .to.be.a("string")
+      .with.not.equal("@cparagraph(3,5)");
+  });
 });
