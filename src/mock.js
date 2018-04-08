@@ -82,7 +82,7 @@ function realApplyMock(app) {
 
   let lastIndex = null;
   app._router.stack.some((item, index) => {
-    if (item.name === "easyMock") {
+    if (item.name === "HelloEasyMockMiddleware") {
       lastIndex = index;
       return true;
     }

@@ -9,6 +9,7 @@ const server = require("./server");
 const mock = require("./mock");
 const lang = require("./lang");
 const opn = require("opn");
+const mw = require("./mock");
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -35,10 +36,13 @@ function activate(context) {
         utils.showInfo(lang.createMockFolder);
       }
       server
-        .start()
+        .start(utils.getWorkspaceRoot(), utils.getPort())
         .then(app => {
+          let helloPath = "/hello/easymock";
+          app.use(mw.corsMiddleware());
+          app.use(helloPath, mw.HelloEasyMockMiddleware());
           mock.applyMock(app);
-          opn("http://127.0.0.1:" + utils.getPort() + "/hello/easymock");
+          opn("http://127.0.0.1:" + utils.getPort() + helloPath);
           utils.showInfo(lang.startSuccess);
         })
         .catch(() => {
