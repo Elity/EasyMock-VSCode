@@ -4,14 +4,14 @@ var path = require("path");
 var glob = require("glob");
 var assert = require("assert");
 var proxy = require("express-http-proxy");
-const watch = require("./watch");
 const log = require("./log");
 const { join, resolve } = path;
 
 let MOCK_DIR;
 let MOCK_FILES;
 let ENABLE_PARSE;
-
+let APP;
+let WATCH;
 let watcher = null;
 
 function getConfig() {
@@ -58,14 +58,14 @@ function createProxy(method, path, target) {
   });
 }
 
-function realApplyMock(app) {
+function realApplyMock() {
   const config = getConfig();
 
   Object.keys(config).forEach(key => {
     const { method, path } = parseKey(key);
     const val = config[key];
     const typeVal = typeof val;
-    assert(!!app[method], `method of ${key} is not valid`);
+    assert(!!APP[method], `method of ${key} is not valid`);
     assert(
       ["function", "object", "string"].includes(typeVal),
       `mock value of ${key} should be function or object or string, but got ${typeVal}`
@@ -75,26 +75,26 @@ function realApplyMock(app) {
       if (/\(.+\)/.test(path)) {
         path = new RegExp(`^${path}$`);
       }
-      app.use(path, createProxy(method, path, val));
+      APP.use(path, createProxy(method, path, val));
     } else {
-      app[method](path, createMockHandler(method, path, val));
+      APP[method](path, createMockHandler(method, path, val));
     }
   });
 
   let lastIndex = null;
-  app._router.stack.some((item, index) => {
+  APP._router.stack.some((item, index) => {
     if (item.name === "HelloEasyMockMiddleware") {
       lastIndex = index;
       return true;
     }
   });
 
-  watcher = watch(MOCK_FILES).on("change delete create", (type, { fsPath }) => {
+  watcher = WATCH(MOCK_FILES).on("change delete create", (type, { fsPath }) => {
     log.info(`File changed(${type}):${fsPath}`);
     if (type === "create") initMockFile(fsPath);
     watcher.close();
-    app._router.stack.splice(lastIndex + 1);
-    applyMock(app);
+    APP._router.stack.splice(lastIndex + 1);
+    applyMock();
   });
 }
 
@@ -122,38 +122,42 @@ function initMockFile(filePath) {
   }
 }
 
-/**
- * app  express application
- * mockPath  mock dir path
- * enableParse need to enable build-in mock parse
- */
-
-function applyMock(app, mockPath, enableParse) {
-  if (mockPath) {
-    MOCK_DIR = mockPath;
-    MOCK_FILES = join(mockPath, "*.js");
-  }
-  if (ENABLE_PARSE) {
-    ENABLE_PARSE = enableParse;
-  }
+function applyMock() {
   try {
-    realApplyMock(app);
+    realApplyMock();
   } catch (e) {
     log.err(e);
-    watcher = watch(MOCK_FILES).on(
+    watcher = WATCH(MOCK_FILES).on(
       "change delete create",
       (type, { fsPath }) => {
         log.info(`File changed(${type}):${fsPath}`);
         if (type === "create") initMockFile(fsPath);
         watcher.close();
-        applyMock(app);
+        applyMock();
       }
     );
   }
 }
 
-function stopWatcher() {
+/**
+ * app  express application
+ * mockPath  mock dir path
+ * enableParse need to enable build-in mock parse
+ * watch  file watch
+ */
+
+function startMock(app, mockPath, enableParse, watch) {
+  MOCK_DIR = mockPath;
+  MOCK_FILES = join(mockPath, "*.js");
+  ENABLE_PARSE = enableParse;
+  APP = app;
+  WATCH = watch;
+  if (!MOCK_DIR || !APP || !WATCH) throw Error("arguments error");
+  applyMock();
+}
+
+function stopMock() {
   watcher && watcher.close && watcher.close();
 }
 
-module.exports = { applyMock, stopWatcher };
+module.exports = { startMock, stopMock };

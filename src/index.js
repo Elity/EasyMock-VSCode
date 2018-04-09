@@ -1,19 +1,19 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-const vscode = require("vscode");
-const path = require("path");
+
 const fs = require("fs");
-const watch = require("./watch");
-const utils = require("./utils");
-const log = require("./log");
-const server = require("./server");
-const mock = require("./mock");
-const i18n = require("./i18n");
 const opn = require("opn");
+const path = require("path");
+const log = require("./log");
+const i18n = require("./i18n");
+const mock = require("./mock");
+const vscode = require("vscode");
+const utils = require("./utils");
+const watch = require("./watch");
+const server = require("./server");
 const mw = require("./middleware");
 
 const lang = i18n(vscode.env.language);
-
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -35,7 +35,7 @@ function activate(context) {
       const mockPath = path.join(rootPath, utils.getMockFolder());
       if (!fs.existsSync(mockPath)) {
         fs.mkdirSync(mockPath);
-        utils.setExample(mockPath);
+        require("./example")(mockPath);
         utils.showInfo(lang.createMockFolder);
       }
       server
@@ -48,7 +48,7 @@ function activate(context) {
           );
           app.use(mw.corsMiddleware());
           app.use(helloPath, mw.HelloEasyMockMiddleware());
-          mock.applyMock(app, mockPath, utils.isEnableMockParse());
+          mock.startMock(app, mockPath, utils.isEnableMockParse(), watch);
           opn("http://127.0.0.1:" + utils.getPort() + helloPath);
           utils.showInfo(lang.startSuccess);
         })
@@ -67,7 +67,7 @@ function activate(context) {
         .stop()
         .then(() => {
           utils.showInfo(lang.stopSuccess);
-          mock.stopWatcher();
+          mock.stopMock();
           running = false;
         })
         .catch(err => utils.log(err));
