@@ -5,11 +5,12 @@ var glob = require("glob");
 var assert = require("assert");
 var proxy = require("express-http-proxy");
 const watch = require("./watch");
-const utils = require("./utils");
+const log = require("./log");
 const { join, resolve } = path;
 
-const MOCK_DIR = join(utils.getWorkspaceRoot(), utils.getMockFolder());
-const MOCK_FILES = join(MOCK_DIR, "*.js");
+let MOCK_DIR;
+let MOCK_FILES;
+let ENABLE_PARSE;
 
 let watcher = null;
 
@@ -24,7 +25,7 @@ function getConfig() {
     try {
       Object.assign(config, require(file));
     } catch (e) {
-      utils.log("Error:" + e.message + ",at " + file);
+      log.err("Error:" + e.message + ",at " + file);
     }
   });
   return config;
@@ -33,7 +34,7 @@ function getConfig() {
 function createMockHandler(method, path, value) {
   return function mockHandler(req, res) {
     let data = typeof value === "function" ? value(req) : value;
-    if (utils.isEnableMockParse()) {
+    if (ENABLE_PARSE !== false) {
       let mockParse = require("./parse");
       data = mockParse(data);
     }
@@ -89,7 +90,7 @@ function realApplyMock(app) {
   });
 
   watcher = watch(MOCK_FILES).on("change delete create", (type, { fsPath }) => {
-    utils.log(`File changed(${type}):${fsPath}`);
+    log.info(`File changed(${type}):${fsPath}`);
     if (type === "create") initMockFile(fsPath);
     watcher.close();
     app._router.stack.splice(lastIndex + 1);
@@ -121,15 +122,28 @@ function initMockFile(filePath) {
   }
 }
 
-function applyMock(app) {
+/**
+ * app  express application
+ * mockPath  mock dir path
+ * enableParse need to enable build-in mock parse
+ */
+
+function applyMock(app, mockPath, enableParse) {
+  if (mockPath) {
+    MOCK_DIR = mockPath;
+    MOCK_FILES = join(mockPath, "*.js");
+  }
+  if (ENABLE_PARSE) {
+    ENABLE_PARSE = enableParse;
+  }
   try {
     realApplyMock(app);
   } catch (e) {
-    utils.log(e);
+    log.err(e);
     watcher = watch(MOCK_FILES).on(
       "change delete create",
       (type, { fsPath }) => {
-        utils.log(`File changed(${type}):${fsPath}`);
+        log.info(`File changed(${type}):${fsPath}`);
         if (type === "create") initMockFile(fsPath);
         watcher.close();
         applyMock(app);

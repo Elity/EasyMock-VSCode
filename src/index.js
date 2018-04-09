@@ -5,11 +5,14 @@ const path = require("path");
 const fs = require("fs");
 const watch = require("./watch");
 const utils = require("./utils");
+const log = require("./log");
 const server = require("./server");
 const mock = require("./mock");
-const lang = require("./lang");
+const i18n = require("./i18n");
 const opn = require("opn");
 const mw = require("./middleware");
+
+const lang = i18n(vscode.env.language);
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -38,15 +41,19 @@ function activate(context) {
       server
         .start(utils.getWorkspaceRoot(), utils.getPort())
         .then(app => {
-          let helloPath = "/hello/easymock";
+          const helloPath = "/hello/easymock";
+          const mockPath = path.join(
+            utils.getWorkspaceRoot(),
+            utils.getMockFolder()
+          );
           app.use(mw.corsMiddleware());
           app.use(helloPath, mw.HelloEasyMockMiddleware());
-          mock.applyMock(app);
+          mock.applyMock(app, mockPath, utils.isEnableMockParse());
           opn("http://127.0.0.1:" + utils.getPort() + helloPath);
           utils.showInfo(lang.startSuccess);
         })
         .catch(err => {
-          console.log(err);
+          log.err(err);
           running = false;
           utils.showError(lang.startFail);
         });

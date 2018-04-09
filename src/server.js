@@ -1,5 +1,6 @@
 const express = require("express");
-var bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
+const log = require("./log");
 
 let _server = null,
   app = null;
@@ -12,16 +13,16 @@ function start(rootPath, port) {
   return new Promise((resolve, reject) => {
     _server = app
       .listen(port, () => {
-        console.log(`Mock Server started`);
+        log.info(`Mock Server started`);
         resolve(app);
       })
       .on("error", error => {
-        console.log(`Failed to start Mock Server due to ${error.message}`);
+        log.err(`Failed to start Mock Server due to ${error.message}`);
         reject(error);
         _server = null;
       })
       .on("request", (req, res) => {
-        console.log(`${req.method} ${req.originalUrl}`);
+        log.info(`${req.method} ${req.originalUrl}`);
       });
     _server.addListener("connection", socket => {
       // 不设置socket连接超时的话无法停止服务
