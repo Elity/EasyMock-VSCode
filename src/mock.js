@@ -70,7 +70,7 @@ function realApplyMock(app) {
       `mock value of ${key} should be function or object or string, but got ${typeVal}`
     );
     if (typeVal === "string") {
-      // url转发的情形  /api/test  =>   https://www.shiguangkey.com/api/test
+      // url转发的情形  /api/test  =>   https://www.xxx.com/api/test
       if (/\(.+\)/.test(path)) {
         path = new RegExp(`^${path}$`);
       }
@@ -92,9 +92,7 @@ function realApplyMock(app) {
     utils.log(`File changed(${type}):${fsPath}`);
     if (type === "create") initMockFile(fsPath);
     watcher.close();
-    console.log(app._router);
     app._router.stack.splice(lastIndex + 1);
-
     applyMock(app);
   });
 }

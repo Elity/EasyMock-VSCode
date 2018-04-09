@@ -18,6 +18,7 @@ function randomZm() {
 }
 
 function repeatStrFn(fn, times, joinStr = "") {
+  if (times <= 0) return "";
   let arr = [];
   while (times--) {
     arr.push(fn());
@@ -26,16 +27,26 @@ function repeatStrFn(fn, times, joinStr = "") {
 }
 
 function genStr(fn, min, max) {
+  if (!min && !max) {
+    min = 1;
+    max = 10;
+  }
   if (!max) return repeatStrFn(fn, min);
   return repeatStrFn(fn, randomInt(min, max + 1));
 }
 
 function genParagraph(fn, joinStr, min, max) {
+  if (!min && !max) {
+    min = 1;
+    max = 5;
+  }
   if (!max) return repeatStrFn(fn, min, joinStr);
   return repeatStrFn(fn, randomInt(min, max + 1), joinStr);
 }
 
 function genFloat(count) {
+  count = parseInt(count);
+  if (count <= 0) count = 0;
   let num;
   while (!(num = randomInt(0, Math.pow(10, count)))) {}
   return ("0".repeat(count) + num).slice(-count);
@@ -44,10 +55,10 @@ function genFloat(count) {
 let idCount;
 // 字符串内函数
 const fns = {
-  str(min = 1, max = 10) {
+  str(min, max) {
     return genStr(randomZm, min, max);
   },
-  cstr(min = 1, max = 10) {
+  cstr(min, max) {
     return genStr(randomHz, min, max);
   },
   num(min = 0, max = 999999999, digit) {
@@ -87,11 +98,11 @@ const fns = {
     if (!idCount) idCount = init | 0;
     return idCount++;
   },
-  paragraph(min = 1, max = 5) {
+  paragraph(min, max) {
     return genParagraph(() => this.str(10, 100), ",", min, max) + ".";
   },
-  cparagraph(min = 1, max = 5) {
-    return genParagraph(() => this.cstr(10, 30), "，", min, max) + "。";
+  cparagraph(min, max) {
+    return genParagraph(() => this.cstr(10, 50), "，", min, max) + "。";
   }
 };
 

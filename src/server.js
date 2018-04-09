@@ -25,7 +25,7 @@ function start(rootPath, port) {
       });
     _server.addListener("connection", socket => {
       // 不设置socket连接超时的话无法停止服务
-      socket.setTimeout(3e3);
+      socket.setTimeout(10e3);
     });
   });
 }

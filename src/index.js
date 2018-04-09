@@ -9,7 +9,7 @@ const server = require("./server");
 const mock = require("./mock");
 const lang = require("./lang");
 const opn = require("opn");
-const mw = require("./mock");
+const mw = require("./middleware");
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -45,7 +45,8 @@ function activate(context) {
           opn("http://127.0.0.1:" + utils.getPort() + helloPath);
           utils.showInfo(lang.startSuccess);
         })
-        .catch(() => {
+        .catch(err => {
+          console.log(err);
           running = false;
           utils.showError(lang.startFail);
         });
