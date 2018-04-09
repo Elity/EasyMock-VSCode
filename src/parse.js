@@ -46,7 +46,7 @@ function genParagraph(fn, joinStr, min, max) {
 
 function genFloat(count) {
   count = parseInt(count);
-  if (count <= 0) count = 0;
+  if (count < 1) return 0;
   let num;
   while (!(num = randomInt(0, Math.pow(10, count)))) {}
   return ("0".repeat(count) + num).slice(-count);
@@ -61,7 +61,14 @@ const fns = {
   cstr(min, max) {
     return genStr(randomHz, min, max);
   },
-  num(min = 0, max = 999999999, digit) {
+  num(min, max, digit) {
+    if (!min && !max) {
+      min = 0;
+      max = 999999999;
+    }
+    if (!max) {
+      max = 0;
+    }
     if (!digit) return randomInt(min, max);
     return parseFloat(randomInt(min, max) + "." + genFloat(digit));
   },

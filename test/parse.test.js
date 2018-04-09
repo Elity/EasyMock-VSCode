@@ -75,6 +75,10 @@ suite("Mock Parse Tests", function() {
       .to.be.a("string")
       .with.lengthOf(10)
       .with.not.equal("@str(10)");
+    expect(parse({ "str|5": "@str(10)" }).str)
+      .to.be.a("string")
+      .with.lengthOf(50)
+      .with.not.equal("@str(10)");
     expect(parse({ str: "@str(1,10)" }).str)
       .to.be.a("string")
       .with.not.equal("@str(1,10)");
@@ -87,6 +91,10 @@ suite("Mock Parse Tests", function() {
     expect(parse({ str: "@cstr(10)" }).str)
       .to.be.a("string")
       .with.lengthOf(10)
+      .with.not.equal("@cstr(10)");
+    expect(parse({ "str|10": "@cstr(10)" }).str)
+      .to.be.a("string")
+      .with.lengthOf(100)
       .with.not.equal("@cstr(10)");
     expect(parse({ str: "@cstr(1,10)" }).str)
       .to.be.a("string")
