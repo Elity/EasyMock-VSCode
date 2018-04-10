@@ -1,5 +1,5 @@
 const fs = require("fs");
-const path = require("fs");
+const path = require("path");
 
 module.exports = function(mockPath) {
   fs.writeFileSync(
