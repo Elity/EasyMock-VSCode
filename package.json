@@ -1,8 +1,8 @@
 {
   "name": "easymock",
   "displayName": "EasyMock - Mock server",
-  "description": "a simple mock server",
-  "version": "1.0.3",
+  "description": "a simple mock server for VSCode",
+  "version": "1.0.4",
   "publisher": "EasyMock",
   "author": "Fighting",
   "license": "MIT",
@@ -59,14 +59,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Elity/EasyMock.git"
+    "url": "https://github.com/Elity/EasyMock-VSCode.git"
   },
   "bugs": {
-    "url": "https://github.com/Elity/EasyMock/issues"
+    "url": "https://github.com/Elity/EasyMock-VSCode/issues"
   },
-  "homepage": "https://github.com/Elity/EasyMock",
+  "homepage": "https://github.com/Elity/EasyMock-VSCode",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "chalk": "^2.3.2",
     "express": "^4.16.3",
     "express-http-proxy": "^1.1.0",
     "glob": "^7.1.2",
