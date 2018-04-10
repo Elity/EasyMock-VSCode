@@ -59,12 +59,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Elity/EasyMock.git"
+    "url": "https://github.com/Elity/EasyMock-VSCode.git"
   },
   "bugs": {
-    "url": "https://github.com/Elity/EasyMock/issues"
+    "url": "https://github.com/Elity/EasyMock-VSCode/issues"
   },
-  "homepage": "https://github.com/Elity/EasyMock",
+  "homepage": "https://github.com/Elity/EasyMock-VSCode",
   "dependencies": {
     "body-parser": "^1.18.2",
     "chalk": "^2.3.2",
