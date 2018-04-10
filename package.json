@@ -1,5 +1,5 @@
 {
-  "name": "easymock-vscode",
+  "name": "easymock",
   "displayName": "EasyMock - Mock server",
   "description": "a simple mock server for VSCode",
   "version": "1.0.4",
