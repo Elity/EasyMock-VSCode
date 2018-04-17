@@ -3,5 +3,6 @@ module.exports = {
   startSuccess: "Mock Server started!",
   startFail: "Mock Server start fail!",
   stopSuccess: "Mock Server have been stopped!",
-  createMockFolder: "Created  folder 'Mock' in current workspace"
+  createMockFolder: "Created  folder 'Mock' in current workspace",
+  helloPageConfirm: "Do you need to start the [Hello Page] every time?"
 };

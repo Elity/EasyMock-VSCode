@@ -13,6 +13,13 @@ let ENABLE_PARSE;
 let APP;
 let WATCH;
 let watcher = null;
+let ERROR_HANDLE;
+let ERROR_STACK = []; // 错误处理函数还没绑定的时候，存储错误
+
+function handleError(err) {
+  if (ERROR_HANDLE) ERROR_HANDLE(err);
+  else ERROR_STACK.push(err);
+}
 
 function getConfig() {
   Object.keys(require.cache).forEach(file => {
@@ -25,6 +32,7 @@ function getConfig() {
     try {
       Object.assign(config, require(file));
     } catch (e) {
+      handleError(e);
       log.err("Error:" + e.message + ",at " + file);
     }
   });
@@ -126,6 +134,7 @@ function applyMock() {
   try {
     realApplyMock();
   } catch (e) {
+    handleError(e);
     log.err(e);
     watcher = WATCH(MOCK_FILES).on(
       "change delete create",
@@ -154,6 +163,10 @@ function startMock(app, mockPath, enableParse, watch) {
   WATCH = watch;
   if (!MOCK_DIR || !APP || !WATCH) throw Error("arguments error");
   applyMock();
+  return function(errorHandle) {
+    ERROR_HANDLE = errorHandle;
+    ERROR_STACK.forEach(err => errorHandle(err));
+  };
 }
 
 function stopMock() {
