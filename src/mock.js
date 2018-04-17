@@ -5,6 +5,7 @@ var glob = require("glob");
 var assert = require("assert");
 var proxy = require("express-http-proxy");
 const log = require("./log");
+const utils = require("./utils");
 const { join, resolve } = path;
 
 let MOCK_DIR;
@@ -25,7 +26,9 @@ function getConfig() {
     try {
       Object.assign(config, require(file));
     } catch (e) {
-      log.err("Error:" + e.message + ",at " + file);
+      log.err(e);
+      utils.log("Error:" + e.message + ",at " + file);
+      utils.showLog();
     }
   });
   return config;
@@ -127,6 +130,8 @@ function applyMock() {
     realApplyMock();
   } catch (e) {
     log.err(e);
+    utils.log("Error:" + e.message);
+    utils.showLog();
     watcher = WATCH(MOCK_FILES).on(
       "change delete create",
       (type, { fsPath }) => {
