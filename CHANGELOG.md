@@ -4,6 +4,10 @@ All notable changes to the "EasyMock" extension will be documented in this file.
 
 <!-- Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file. -->
 
+##[1.0.5]
+
+* 放出 vscode 本身的日志功能
+
 ## [1.0.4]
 
 * 修复 bug
