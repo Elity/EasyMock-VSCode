@@ -36,7 +36,8 @@ module.exports = function(mockPath) {
           "id":"@inc(10000)",
           "age|18-30":0,
           "name":"@cstr(2,4)",
-          "desc":"@cparagraph"
+          "desc":"@cparagraph",
+          "a|1":["张三","李四","王五"]
         }]
       }
       

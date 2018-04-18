@@ -34,6 +34,10 @@ exports.showInput = function(prompt) {
   });
 };
 
+exports.showConfirm = function(msg) {
+  return vscode.window.showConfirm(msg);
+};
+
 exports.getPort = function() {
   return getConfig("serverPort");
 };
@@ -46,6 +50,16 @@ exports.isEnableMockParse = function() {
   return getConfig("mockParse");
 };
 
+exports.isEnableHelloPage = function() {
+  return getConfig("helloPage");
+};
+
 function getConfig(configName) {
   return vscode.workspace.getConfiguration("EasyMock").get(configName);
+}
+
+function updateConfig(configName, configValue) {
+  return vscode.workspace
+    .getConfiguration("EasyMock")
+    .update(configName, configValue);
 }
