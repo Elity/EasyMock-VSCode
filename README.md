@@ -7,6 +7,7 @@ A vscode extension for mock data
 * `EasyMock.mockFolderName`: Any legal file name
 * `EasyMock.serverPort`: Set the port number of the mock server
 * `EasyMock.mockParse`: Enable build-in mock parse
+* `EasyMock.helloPage`: Enable hello page on start
 
 ## Usage
 
