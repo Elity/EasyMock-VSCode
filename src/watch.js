@@ -1,25 +1,22 @@
-const vscode = require("vscode");
+const chokidar = require("chokidar");
 
 function watch(globPath) {
-  const watcher = vscode.workspace.createFileSystemWatcher(globPath);
-
-  function title(str) {
-    return str.toLowerCase().replace(/^[a-z]/, L => L.toUpperCase());
-  }
-
+  // chokidar.watch 传入glob类型地址的时候 不能是 windows风格的斜杠
+  const watcher = chokidar.watch(globPath.replace(/\\/g, "/"), {
+    ignored: /node_modules/,
+    ignoreInitial: true
+  });
   return {
     on(eventNames, fn) {
       eventNames
         .split(/\s+/)
-        .forEach(
-          name =>
-            name &&
-            watcher[`onDid${title(name)}`](fn.bind(null, name.toLowerCase()))
-        );
+        .filter(name => name)
+        .map(name => name.toLowerCase())
+        .forEach(name => name && watcher.on(name, fn.bind(null, name)));
       return this;
     },
     close() {
-      watcher.dispose();
+      watcher.close();
     }
   };
 }

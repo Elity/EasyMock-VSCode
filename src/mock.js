@@ -98,9 +98,9 @@ function realApplyMock() {
     }
   });
 
-  watcher = WATCH(MOCK_FILES).on("change delete create", (type, { fsPath }) => {
+  watcher = WATCH(MOCK_FILES).on("change add unlink", (type, fsPath) => {
     log.info(`File changed(${type}):${fsPath}`);
-    if (type === "create") initMockFile(fsPath);
+    if (type === "add") initMockFile(fsPath);
     watcher.close();
     APP._router.stack.splice(lastIndex + 1);
     applyMock();
@@ -139,15 +139,12 @@ function applyMock() {
     log.err(e);
     utils.log("Error:" + e.message);
     utils.showLog();
-    watcher = WATCH(MOCK_FILES).on(
-      "change delete create",
-      (type, { fsPath }) => {
-        log.info(`File changed(${type}):${fsPath}`);
-        if (type === "create") initMockFile(fsPath);
-        watcher.close();
-        applyMock();
-      }
-    );
+    watcher = WATCH(MOCK_FILES).on("change add unlink", (type, fsPath) => {
+      log.info(`File changed(${type}):${fsPath}`);
+      if (type === "add") initMockFile(fsPath);
+      watcher.close();
+      applyMock();
+    });
   }
 }
 
