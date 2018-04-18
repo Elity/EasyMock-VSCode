@@ -181,12 +181,8 @@ let typeParse = {
 function parse(data, des) {
   let tp = type(data);
   if (typeParse[tp]) return typeParse[tp](data, des); // 基础类型解析
-  if (!des && tp === "array") {
-    return data.map(item => parse(item));
-  }
-  if (tp === "function") {
-    return data(fns);
-  }
+  if (!des && tp === "array") return data.map(item => parse(item)); //无描述信息的数组，直接解析内部成员
+  if (tp === "function") return data(fns); // 函数类型则直接运行该函数
   //无描述信息说明为最顶层的数据或无需parse的数据
   if (des) {
     if (tp === "array") {

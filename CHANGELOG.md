@@ -4,9 +4,10 @@ All notable changes to the "EasyMock" extension will be documented in this file.
 
 <!-- Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file. -->
 
-##[1.0.8]
+##[1.0.8,1.0.9]
 
 * 修复解析数组的 bug
+* 替换内置 watch
 
 ## [1.0.7]
 
