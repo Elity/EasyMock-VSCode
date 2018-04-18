@@ -39,6 +39,15 @@ module.exports = function(mockPath) {
           "desc":"@cparagraph",
           "a|1":["张三","李四","王五"]
         }]
+      },
+      // 开启内置mock解析的时候，对象值也可以是一个函数，函数的参数是一个包含所有内置函数的对象
+      // 函数形式调用可以解决 {id:"@inc(100)"} 这样占位函数永远只能返回字符串类型的问题
+      '/api/mock/parse/testfns':{
+        "data|10":[{
+          "name":"@cstr(3)",
+          "id":mock=>mock.inc(100),
+          "rnd":()=>Math.random()
+        }]
       }
       
       //内置mock解析语法参考了mock.js，不能与其同时使用

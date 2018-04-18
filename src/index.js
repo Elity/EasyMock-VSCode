@@ -46,7 +46,7 @@ function activate(context) {
             utils.getWorkspaceRoot(),
             utils.getMockFolder()
           );
-          app.use(mw.corsMiddleware());
+          app.use(mw.corsMiddleware(utils.getCorsHeaders()));
           app.use(helloPath, mw.HelloEasyMockMiddleware());
           mock.startMock(app, mockPath, utils.isEnableMockParse(), watch)(
             err => {

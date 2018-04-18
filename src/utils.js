@@ -46,6 +46,10 @@ exports.getMockFolder = function() {
   return getConfig("mockFolderName");
 };
 
+exports.getCorsHeaders = function() {
+  return getConfig("corsHeaders");
+};
+
 exports.isEnableMockParse = function() {
   return getConfig("mockParse");
 };

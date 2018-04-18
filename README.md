@@ -103,6 +103,7 @@ After select `EasyMock: Run EasyMock`,to view the example file at `{workspace}/{
 * `inc(init)` increament integer
 * `paragraph(min = 1, max = 5)` generate paragraph
 * `cparagraph(min = 1, max = 5)` generate chinese paragraph
+* `pick([1,2,3,4,5])` pick a element from array or arguments
 
 #### usage
 

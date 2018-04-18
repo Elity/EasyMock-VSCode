@@ -6,14 +6,14 @@ module.exports = {
     };
   },
 
-  corsMiddleware() {
+  corsMiddleware(customHeader) {
     return function corsMiddleware(req, res, next) {
       var method =
         req.method && req.method.toUpperCase && req.method.toUpperCase();
       res.set({
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-        "Access-Control-Allow-Headers": "X-Requested-With, Content-Type",
+        "Access-Control-Allow-Headers": `X-Requested-With, Content-Type,${customHeader}`,
         "Access-Control-Allow-Credentials": "true"
       });
 
