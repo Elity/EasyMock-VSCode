@@ -8,6 +8,7 @@ A vscode extension for mock data
 * `EasyMock.serverPort`: Set the port number of the mock server
 * `EasyMock.mockParse`: Enable build-in mock parse
 * `EasyMock.helloPage`: Enable hello page on start
+* `EasyMock.corsHeaders`: Customize header names
 
 ## Usage
 
