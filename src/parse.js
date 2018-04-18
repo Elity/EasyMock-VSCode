@@ -182,7 +182,7 @@ function parse(data, des) {
   let tp = type(data);
   if (typeParse[tp]) return typeParse[tp](data, des); // 基础类型解析
   if (!des && tp === "array") {
-    data = data.map(item => parse(item));
+    return data.map(item => parse(item));
   }
   if (tp === "function") {
     return data(fns);
