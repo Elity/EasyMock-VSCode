@@ -1,9 +1,9 @@
-var fs = require("fs");
-var url = require("url");
-var path = require("path");
-var glob = require("glob");
-var assert = require("assert");
-var proxy = require("express-http-proxy");
+const fs = require("fs");
+const url = require("url");
+const path = require("path");
+const glob = require("glob");
+const assert = require("assert");
+const proxy = require("express-http-proxy");
 const log = require("./log");
 const utils = require("./utils");
 const { join, resolve } = path;

@@ -8,7 +8,7 @@ module.exports = {
 
   corsMiddleware(customHeader) {
     return function corsMiddleware(req, res, next) {
-      var method =
+      let method =
         req.method && req.method.toUpperCase && req.method.toUpperCase();
       res.set({
         "Access-Control-Allow-Origin": "*",
