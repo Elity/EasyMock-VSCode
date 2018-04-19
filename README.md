@@ -7,6 +7,8 @@ A vscode extension for mock data
 * `EasyMock.mockFolderName`: Any legal file name
 * `EasyMock.serverPort`: Set the port number of the mock server
 * `EasyMock.mockParse`: Enable build-in mock parse
+* `EasyMock.helloPage`: Enable hello page on start
+* `EasyMock.corsHeaders`: Customize header names
 
 ## Usage
 
@@ -102,6 +104,7 @@ After select `EasyMock: Run EasyMock`,to view the example file at `{workspace}/{
 * `inc(init)` increament integer
 * `paragraph(min = 1, max = 5)` generate paragraph
 * `cparagraph(min = 1, max = 5)` generate chinese paragraph
+* `pick([1,2,3,4,5])` pick a element from array or arguments
 
 #### usage
 

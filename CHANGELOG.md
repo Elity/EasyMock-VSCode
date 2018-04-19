@@ -4,6 +4,21 @@ All notable changes to the "EasyMock" extension will be documented in this file.
 
 <!-- Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file. -->
 
+##[1.0.8,1.0.9]
+
+* 修复解析数组的 bug
+* 替换内置 watch
+
+## [1.0.7]
+
+* 增加内置 pick 函数
+* 增加内置 mock 值可为 function
+* 修复内置 mock 处理数组的 bug
+
+## [1.0.5,1.0.6]
+
+* 完善错误提示
+
 ## [1.0.4]
 
 * 修复 bug

@@ -46,10 +46,21 @@ function activate(context) {
             utils.getWorkspaceRoot(),
             utils.getMockFolder()
           );
-          app.use(mw.corsMiddleware());
+          app.use(mw.corsMiddleware(utils.getCorsHeaders()));
           app.use(helloPath, mw.HelloEasyMockMiddleware());
-          mock.startMock(app, mockPath, utils.isEnableMockParse(), watch);
-          opn("http://127.0.0.1:" + utils.getPort() + helloPath);
+          mock.startMock(app, mockPath, utils.isEnableMockParse(), watch)(
+            err => {
+              let errStr = err.stack
+                .split("\n")
+                .splice(0, 4)
+                .join("\n");
+              utils.log(errStr);
+              utils.showError(errStr);
+            }
+          );
+          utils.isEnableHelloPage() &&
+            opn("http://127.0.0.1:" + utils.getPort() + helloPath);
+
           utils.showInfo(lang.startSuccess);
         })
         .catch(err => {

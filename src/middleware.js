@@ -1,18 +1,19 @@
 module.exports = {
   HelloEasyMockMiddleware() {
     return function HelloEasyMockMiddleware(req, res, next) {
-      res.send("<h1>Hello EasyMock!</h1>");
+      res.send(`<h1>Hello EasyMock!</h1>
+      <h5>You can disable opening this page in the configuration</h5>`);
     };
   },
 
-  corsMiddleware() {
+  corsMiddleware(customHeader) {
     return function corsMiddleware(req, res, next) {
-      var method =
+      let method =
         req.method && req.method.toUpperCase && req.method.toUpperCase();
       res.set({
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-        "Access-Control-Allow-Headers": "X-Requested-With, Content-Type",
+        "Access-Control-Allow-Headers": `X-Requested-With, Content-Type,${customHeader}`,
         "Access-Control-Allow-Credentials": "true"
       });
 

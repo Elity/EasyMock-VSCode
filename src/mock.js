@@ -1,10 +1,11 @@
-var fs = require("fs");
-var url = require("url");
-var path = require("path");
-var glob = require("glob");
-var assert = require("assert");
-var proxy = require("express-http-proxy");
+const fs = require("fs");
+const url = require("url");
+const path = require("path");
+const glob = require("glob");
+const assert = require("assert");
+const proxy = require("express-http-proxy");
 const log = require("./log");
+const utils = require("./utils");
 const { join, resolve } = path;
 
 let MOCK_DIR;
@@ -13,6 +14,13 @@ let ENABLE_PARSE;
 let APP;
 let WATCH;
 let watcher = null;
+let ERROR_HANDLE;
+let ERROR_STACK = []; // 错误处理函数还没绑定的时候，存储错误
+
+function handleError(err) {
+  if (ERROR_HANDLE) ERROR_HANDLE(err);
+  else ERROR_STACK.push(err);
+}
 
 function getConfig() {
   Object.keys(require.cache).forEach(file => {
@@ -25,6 +33,7 @@ function getConfig() {
     try {
       Object.assign(config, require(file));
     } catch (e) {
+      handleError(e);
       log.err("Error:" + e.message + ",at " + file);
     }
   });
@@ -89,9 +98,9 @@ function realApplyMock() {
     }
   });
 
-  watcher = WATCH(MOCK_FILES).on("change delete create", (type, { fsPath }) => {
+  watcher = WATCH(MOCK_FILES).on("change add unlink", (type, fsPath) => {
     log.info(`File changed(${type}):${fsPath}`);
-    if (type === "create") initMockFile(fsPath);
+    if (type === "add") initMockFile(fsPath);
     watcher.close();
     APP._router.stack.splice(lastIndex + 1);
     applyMock();
@@ -126,16 +135,16 @@ function applyMock() {
   try {
     realApplyMock();
   } catch (e) {
+    handleError(e);
     log.err(e);
-    watcher = WATCH(MOCK_FILES).on(
-      "change delete create",
-      (type, { fsPath }) => {
-        log.info(`File changed(${type}):${fsPath}`);
-        if (type === "create") initMockFile(fsPath);
-        watcher.close();
-        applyMock();
-      }
-    );
+    utils.log("Error:" + e.message);
+    utils.showLog();
+    watcher = WATCH(MOCK_FILES).on("change add unlink", (type, fsPath) => {
+      log.info(`File changed(${type}):${fsPath}`);
+      if (type === "add") initMockFile(fsPath);
+      watcher.close();
+      applyMock();
+    });
   }
 }
 
@@ -154,6 +163,10 @@ function startMock(app, mockPath, enableParse, watch) {
   WATCH = watch;
   if (!MOCK_DIR || !APP || !WATCH) throw Error("arguments error");
   applyMock();
+  return function(errorHandle) {
+    ERROR_HANDLE = errorHandle;
+    ERROR_STACK.forEach(err => errorHandle(err));
+  };
 }
 
 function stopMock() {

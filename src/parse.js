@@ -96,7 +96,7 @@ const fns = {
   },
   uuid() {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-      var r = (Math.random() * 16) | 0,
+      let r = (Math.random() * 16) | 0,
         v = c == "x" ? r : (r & 0x3) | 0x8;
       return v.toString(16);
     });
@@ -110,6 +110,14 @@ const fns = {
   },
   cparagraph(min, max) {
     return genParagraph(() => this.cstr(10, 50), "，", min, max) + "。";
+  },
+  pick(first, ...args) {
+    if (Array.isArray(first)) {
+      args = first;
+    } else {
+      args.push(first);
+    }
+    return args[Math.floor(Math.random() * args.length)];
   }
 };
 
@@ -157,7 +165,9 @@ let typeParse = {
       group3 //group3 (arg)
     ) {
       return fns[group2]
-        ? group3 ? eval(`fns.${group1}`) : eval(`fns.${group1}()`)
+        ? group3
+          ? eval(`fns.${group1}`)
+          : eval(`fns.${group1}()`)
         : match;
     });
     if (!des) return data;
@@ -171,7 +181,8 @@ let typeParse = {
 function parse(data, des) {
   let tp = type(data);
   if (typeParse[tp]) return typeParse[tp](data, des); // 基础类型解析
-  if (!des && tp === "array") des = { min: data.length, min: data.length };
+  if (!des && tp === "array") return data.map(item => parse(item)); //无描述信息的数组，直接解析内部成员
+  if (tp === "function") return data(fns); // 函数类型则直接运行该函数
   //无描述信息说明为最顶层的数据或无需parse的数据
   if (des) {
     if (tp === "array") {
