@@ -189,4 +189,17 @@ suite("Mock Parse Tests", function() {
       .to.be.a("string")
       .with.not.equal("@cparagraph(3,5)");
   });
+  test("mock build-in function @pick", function() {
+    expect(parse({ pick: "@pick(1,2,3,4)" }).pick)
+      .to.be.a("string")
+      .with.not.equal("@pickpick(1,2,3,4)");
+
+    expect(parse({ pick: "@pick([1,2,3,4])" }).pick)
+      .to.be.a("string")
+      .with.not.equal("@pick([1,2,3,4])");
+
+    expect(
+      ["1", "2", "3", "4"].indexOf(parse({ pick: "@pick(1,2,3,4)" }).pick)
+    ).not.equal(-1);
+  });
 });
