@@ -92,6 +92,26 @@ After select `EasyMock: Run EasyMock`,to view the example file at `{workspace}/{
 }
 ```
 
+#### function
+
+```
+{
+    age: function(){
+        return 18
+    },
+    name: function(buildInFns){
+        return buildInFns.cstr(2-4)
+    },
+    id: buildInFns=>buildInFns.inc(100)
+}
+
+{
+    age: 18,
+    name: '张三',
+    id: 109
+}
+```
+
 ### build-in placeholder function
 
 * `str(min = 1, max = 10)` random string
