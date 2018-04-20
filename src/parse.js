@@ -120,6 +120,38 @@ const fns = {
       return first;
     }
     return args[Math.floor(Math.random() * args.length)];
+  },
+  host() {
+    return (
+      this.str(2, 10) +
+      "." +
+      this.pick("com", "cn", "org", "edu", "gov", "net")
+    ).toLowerCase();
+  },
+  email() {
+    return (this.str(1, 10) + "@" + this.host()).toLowerCase();
+  },
+  url() {
+    return (
+      this.pick("http", "https") +
+      "://" +
+      this.str(1, 5) +
+      "." +
+      this.host() +
+      "/" +
+      this.str(1, 5)
+    ).toLocaleLowerCase();
+  },
+  ip() {
+    return (
+      this.num(0, 255) +
+      "." +
+      this.num(0, 255) +
+      "." +
+      this.num(0, 255) +
+      "." +
+      this.num(0, 255)
+    );
   }
 };
 
