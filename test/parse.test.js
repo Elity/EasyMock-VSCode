@@ -192,7 +192,7 @@ suite("Mock Parse Tests", function() {
   test("mock build-in function @pick", function() {
     expect(parse({ pick: "@pick(1,2,3,4)" }).pick)
       .to.be.a("string")
-      .with.not.equal("@pickpick(1,2,3,4)");
+      .with.not.equal("@pick(1,2,3,4)");
 
     expect(parse({ pick: "@pick([1,2,3,4])" }).pick)
       .to.be.a("string")
@@ -201,5 +201,53 @@ suite("Mock Parse Tests", function() {
     expect(
       ["1", "2", "3", "4"].indexOf(parse({ pick: "@pick(1,2,3,4)" }).pick)
     ).not.equal(-1);
+  });
+
+  test("mock build-in function @host", function() {
+    expect(parse({ host: "@host()" }).host)
+      .to.be.a("string")
+      .with.not.equal("@host()");
+
+    expect(parse({ host: "@host" }).host)
+      .to.be.a("string")
+      .with.not.equal("@host");
+    var host = parse({ host: "@host()" }).host;
+    expect(/^\w+\.\w+$/.test(host)).to.be.ok;
+  });
+
+  test("mock build-in function @ip", function() {
+    expect(parse({ ip: "@ip()" }).ip)
+      .to.be.a("string")
+      .with.not.equal("@ip()");
+
+    expect(parse({ ip: "@ip" }).ip)
+      .to.be.a("string")
+      .with.not.equal("@ip");
+    var ip = parse({ ip: "@ip()" }).ip;
+    expect(/^\d+\.\d+\.\d+\.\d+$/.test(ip)).to.be.ok;
+  });
+
+  test("mock build-in function @email", function() {
+    expect(parse({ email: "@email()" }).email)
+      .to.be.a("string")
+      .with.not.equal("@email()");
+
+    expect(parse({ email: "@email" }).email)
+      .to.be.a("string")
+      .with.not.equal("@email");
+    var email = parse({ email: "@email()" }).email;
+    expect(/^\w+@\w+\.\w+$/.test(email)).to.be.ok;
+  });
+
+  test("mock build-in function @url", function() {
+    expect(parse({ url: "@url()" }).url)
+      .to.be.a("string")
+      .with.not.equal("@url()");
+
+    expect(parse({ url: "@url" }).url)
+      .to.be.a("string")
+      .with.not.equal("@url");
+    var url = parse({ url: "@url()" }).url;
+    expect(/^https?:\/\/\w+\.\w+\.\w+\/\w+$/.test(url)).to.be.ok;
   });
 });

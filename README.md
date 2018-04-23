@@ -125,6 +125,10 @@ After select `EasyMock: Run EasyMock`,to view the example file at `{workspace}/{
 * `paragraph(min = 1, max = 5)` generate paragraph
 * `cparagraph(min = 1, max = 5)` generate chinese paragraph
 * `pick([1,2,3,4,5])` pick a element from array or arguments
+* `url()` generate url
+* `email()` generate email
+* `host()` generate host
+* `ip()` generate ip
 
 #### usage
 
