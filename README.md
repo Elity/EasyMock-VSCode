@@ -100,7 +100,7 @@ After select `EasyMock: Run EasyMock`,to view the example file at `{workspace}/{
         return 18
     },
     name: function(buildInFns){
-        return buildInFns.cstr(2-4)
+        return buildInFns.cstr(2,4)
     },
     id: buildInFns=>buildInFns.inc(100)
 }
