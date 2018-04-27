@@ -39,7 +39,7 @@ function activate(context) {
         require("./example")(mockPath);
         utils.showInfo(lang.createMockFolder);
       }
-      let port = 9988 || utils.getPort();
+      let port = utils.getPort();
       detect(port)
         .then(newPort => {
           if (newPort != port) {
