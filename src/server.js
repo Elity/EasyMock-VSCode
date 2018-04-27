@@ -13,7 +13,7 @@ function start(rootPath, port) {
   return new Promise((resolve, reject) => {
     _server = app
       .listen(port, () => {
-        log.info(`Mock Server started`);
+        log.info(`Mock Server started on:${port}`);
         resolve(app);
       })
       .on("error", error => {

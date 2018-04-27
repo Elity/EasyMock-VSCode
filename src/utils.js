@@ -34,8 +34,11 @@ exports.showInput = function(prompt) {
   });
 };
 
-exports.showConfirm = function(msg) {
-  return vscode.window.showConfirm(msg);
+exports.showPick = function(msg, optional) {
+  return vscode.window.showQuickPick(optional, {
+    placeHolder: msg,
+    ignoreFocusOut: true
+  });
 };
 
 exports.getPort = function() {

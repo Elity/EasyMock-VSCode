@@ -10,8 +10,14 @@
     "vscode": "^1.21.0"
   },
   "icon": "asset/icon.png",
-  "keywords": ["mock", "easy mock", "mock server"],
-  "categories": ["Other"],
+  "keywords": [
+    "mock",
+    "easy mock",
+    "mock server"
+  ],
+  "categories": [
+    "Other"
+  ],
   "activationEvents": [
     "onCommand:easymock.runMcok",
     "onCommand:easymock.stopMcok"
@@ -79,6 +85,7 @@
     "body-parser": "^1.18.2",
     "chalk": "^2.3.2",
     "chokidar": "^2.0.3",
+    "detect-port": "^1.2.2",
     "express": "^4.16.3",
     "express-http-proxy": "^1.1.0",
     "glob": "^7.1.2",

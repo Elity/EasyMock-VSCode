@@ -4,6 +4,7 @@
 const fs = require("fs");
 const opn = require("opn");
 const path = require("path");
+const detect = require("detect-port");
 const log = require("./log");
 const i18n = require("./i18n");
 const mock = require("./mock");
@@ -38,8 +39,24 @@ function activate(context) {
         require("./example")(mockPath);
         utils.showInfo(lang.createMockFolder);
       }
-      server
-        .start(utils.getWorkspaceRoot(), utils.getPort())
+      let port = 9988 || utils.getPort();
+      detect(port)
+        .then(newPort => {
+          if (newPort != port) {
+            return utils
+              .showPick(lang.portOccupied + port, [
+                lang.tryPort + newPort,
+                lang.giveupPort + port
+              ])
+              .then(
+                sel =>
+                  sel === lang.tryPort + newPort ? (port = newPort) : port
+              );
+          } else {
+            return port;
+          }
+        })
+        .then(port => server.start(utils.getWorkspaceRoot(), port))
         .then(app => {
           const helloPath = "/hello/easymock";
           const mockPath = path.join(
@@ -59,7 +76,7 @@ function activate(context) {
             }
           );
           utils.isEnableHelloPage() &&
-            opn("http://127.0.0.1:" + utils.getPort() + helloPath);
+            opn("http://127.0.0.1:" + port + helloPath);
 
           utils.showInfo(lang.startSuccess);
         })
