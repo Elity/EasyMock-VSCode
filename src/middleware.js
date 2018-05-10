@@ -12,9 +12,11 @@ module.exports = {
         req.method && req.method.toUpperCase && req.method.toUpperCase();
       res.set({
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+        "Access-Control-Allow-Methods":
+          "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
         "Access-Control-Allow-Headers": `X-Requested-With, Content-Type,${customHeader}`,
-        "Access-Control-Allow-Credentials": "true"
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Max-Age": 86400,
       });
 
       if (method === "OPTIONS") {
@@ -24,5 +26,5 @@ module.exports = {
         next();
       }
     };
-  }
+  },
 };
