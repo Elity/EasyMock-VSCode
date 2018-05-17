@@ -9,6 +9,7 @@ A vscode extension for mock data
 * `EasyMock.mockParse`: Enable build-in mock parse
 * `EasyMock.helloPage`: Enable hello page on start
 * `EasyMock.corsHeaders`: Customize header names
+* `EasyMock.responseTime`：Set response time
 
 ## Usage
 
@@ -129,6 +130,8 @@ After select `EasyMock: Run EasyMock`,to view the example file at `{workspace}/{
 * `email()` generate email
 * `host()` generate host
 * `ip()` generate ip
+* `phone()` generate phone
+* `qq()` generate qq
 
 #### usage
 

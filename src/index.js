@@ -46,7 +46,7 @@ function activate(context) {
             return utils
               .showPick(lang.portOccupied + port, [
                 lang.tryPort + newPort,
-                lang.giveupPort + port
+                lang.giveupPort + port,
               ])
               .then(
                 sel =>
@@ -65,16 +65,20 @@ function activate(context) {
           );
           app.use(mw.corsMiddleware(utils.getCorsHeaders()));
           app.use(helloPath, mw.HelloEasyMockMiddleware());
-          mock.startMock(app, mockPath, utils.isEnableMockParse(), watch)(
-            err => {
-              let errStr = err.stack
-                .split("\n")
-                .splice(0, 4)
-                .join("\n");
-              utils.log(errStr);
-              utils.showError(errStr);
-            }
-          );
+          mock.startMock(
+            app,
+            mockPath,
+            utils.isEnableMockParse(),
+            watch,
+            utils.getResponseTime()
+          )(err => {
+            let errStr = err.stack
+              .split("\n")
+              .splice(0, 4)
+              .join("\n");
+            utils.log(errStr);
+            utils.showError(errStr);
+          });
           utils.isEnableHelloPage() &&
             opn("http://127.0.0.1:" + port + helloPath);
 

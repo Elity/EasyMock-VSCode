@@ -15,7 +15,7 @@ exports.getWorkspaceRoot = function() {
   if (!workspaceFolders) return;
   const [rootPath] = workspaceFolders;
   const {
-    uri: { fsPath }
+    uri: { fsPath },
   } = rootPath;
   return fsPath;
 };
@@ -30,14 +30,14 @@ exports.showError = function(msg) {
 
 exports.showInput = function(prompt) {
   return vscode.window.showInputBox({
-    prompt
+    prompt,
   });
 };
 
 exports.showPick = function(msg, optional) {
   return vscode.window.showQuickPick(optional, {
     placeHolder: msg,
-    ignoreFocusOut: true
+    ignoreFocusOut: true,
   });
 };
 
@@ -59,6 +59,10 @@ exports.isEnableMockParse = function() {
 
 exports.isEnableHelloPage = function() {
   return getConfig("helloPage");
+};
+
+exports.getResponseTime = function() {
+  return getConfig("responseTime");
 };
 
 function getConfig(configName) {

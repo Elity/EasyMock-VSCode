@@ -152,7 +152,13 @@ const fns = {
       "." +
       this.num(0, 255)
     );
-  }
+  },
+  phone() {
+    return "1" + randomInt(1000000000, 9999999999);
+  },
+  qq() {
+    return randomInt(10001, 9999999999999);
+  },
 };
 
 /**
@@ -171,7 +177,7 @@ function getKeyDes(key) {
     min: min | 0,
     max: max | 0,
     dmin: dmin | 0,
-    dmax: dmax | 0
+    dmax: dmax | 0,
   };
 }
 
@@ -209,7 +215,7 @@ let typeParse = {
   },
   boolean(data, des) {
     return Math.random() < des.min / (des.min + des.max) ? data : !data;
-  }
+  },
 };
 
 function parse(data, des) {

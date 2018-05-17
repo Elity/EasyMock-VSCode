@@ -11,6 +11,7 @@ const { join, resolve } = path;
 let MOCK_DIR;
 let MOCK_FILES;
 let ENABLE_PARSE;
+let RESPONSE_TIME;
 let APP;
 let WATCH;
 let watcher = null;
@@ -47,7 +48,13 @@ function createMockHandler(method, path, value) {
       let mockParse = require("./parse");
       data = mockParse(data);
     }
-    res.json(data);
+    if (!RESPONSE_TIME) {
+      res.json(data);
+    } else {
+      setTimeout(() => {
+        res.json(data);
+      }, RESPONSE_TIME);
+    }
   };
 }
 
@@ -63,32 +70,39 @@ function createProxy(method, path, target) {
         matchPath = matches[1];
       }
       return join(url.parse(target).path, matchPath).replace(/\\/g, "/");
-    }
+    },
   });
 }
 
 function realApplyMock() {
   const config = getConfig();
-
-  Object.keys(config).forEach(key => {
-    const { method, path } = parseKey(key);
-    const val = config[key];
-    const typeVal = typeof val;
-    assert(!!APP[method], `method of ${key} is not valid`);
-    assert(
-      ["function", "object", "string"].includes(typeVal),
-      `mock value of ${key} should be function or object or string, but got ${typeVal}`
-    );
-    if (typeVal === "string") {
-      // url转发的情形  /api/test  =>   https://www.xxx.com/api/test
-      if (/\(.+\)/.test(path)) {
-        path = new RegExp(`^${path}$`);
+  if (
+    config["*"] &&
+    typeof config["*"] === "string" &&
+    config["*"].indexOf("http") === 0
+  ) {
+    APP.all("/*", proxy(config["*"]));
+  } else {
+    Object.keys(config).forEach(key => {
+      const { method, path } = parseKey(key);
+      const val = config[key];
+      const typeVal = typeof val;
+      assert(!!APP[method], `method of ${key} is not valid`);
+      assert(
+        ["function", "object", "string"].includes(typeVal),
+        `mock value of ${key} should be function or object or string, but got ${typeVal}`
+      );
+      if (typeVal === "string") {
+        // url转发的情形  /api/test  =>   https://www.xxx.com/api/test
+        if (/\(.+\)/.test(path)) {
+          path = new RegExp(`^${path}$`);
+        }
+        APP.use(path, createProxy(method, path, val));
+      } else {
+        APP[method](path, createMockHandler(method, path, val));
       }
-      APP.use(path, createProxy(method, path, val));
-    } else {
-      APP[method](path, createMockHandler(method, path, val));
-    }
-  });
+    });
+  }
 
   let lastIndex = null;
   APP._router.stack.some((item, index) => {
@@ -155,11 +169,12 @@ function applyMock() {
  * watch  file watch
  */
 
-function startMock(app, mockPath, enableParse, watch) {
+function startMock(app, mockPath, enableParse, watch, apiResponseTime) {
   MOCK_DIR = mockPath;
   MOCK_FILES = join(mockPath, "*.js");
   ENABLE_PARSE = enableParse;
   APP = app;
+  RESPONSE_TIME = apiResponseTime;
   WATCH = watch;
   if (!MOCK_DIR || !APP || !WATCH) throw Error("arguments error");
   applyMock();
