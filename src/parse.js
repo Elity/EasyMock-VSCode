@@ -214,6 +214,7 @@ let typeParse = {
     return data.repeat(randomInt(des.min, des.max));
   },
   boolean(data, des) {
+    if(!des)return data
     return Math.random() < des.min / (des.min + des.max) ? data : !data;
   },
 };
@@ -225,7 +226,7 @@ function parse(data, des) {
   if (!des && tp === "array") return data.map(item => parse(item)); //无描述信息的数组，直接解析内部成员
   if (tp === "function") return data(fns); // 函数类型则直接运行该函数
   //无描述信息说明为最顶层的数据或无需parse的数据
-  if (des) {
+  if (des) {--
     if (tp === "array") {
       let len = randomInt(des.min, des.max);
       if (len <= 0) return [];
