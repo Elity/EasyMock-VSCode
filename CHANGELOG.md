@@ -4,6 +4,11 @@ All notable changes to the "EasyMock" extension will be documented in this file.
 
 <!-- Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file. -->
 
+## [1.0.12]
+
+* 支持 mock 文件夹嵌套
+* 修复模版数据中有 bool 值时出错的情况
+
 ## [1.0.11]
 
 * 添加响应延时设置，可以模拟服务端响应很慢的情况

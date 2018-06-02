@@ -1,11 +1,11 @@
-const fs = require("fs");
-const url = require("url");
-const path = require("path");
-const glob = require("glob");
-const assert = require("assert");
-const proxy = require("express-http-proxy");
-const log = require("./log");
-const utils = require("./utils");
+const fs = require('fs');
+const url = require('url');
+const path = require('path');
+const glob = require('glob');
+const assert = require('assert');
+const proxy = require('express-http-proxy');
+const log = require('./log');
+const utils = require('./utils');
 const { join, resolve } = path;
 
 let MOCK_DIR;
@@ -35,7 +35,7 @@ function getConfig() {
       Object.assign(config, require(file));
     } catch (e) {
       handleError(e);
-      log.err("Error:" + e.message + ",at " + file);
+      log.err('Error:' + e.message + ',at ' + file);
     }
   });
   return config;
@@ -43,9 +43,9 @@ function getConfig() {
 
 function createMockHandler(method, path, value) {
   return function mockHandler(req, res) {
-    let data = typeof value === "function" ? value(req) : value;
+    let data = typeof value === 'function' ? value(req) : value;
     if (ENABLE_PARSE !== false) {
-      let mockParse = require("./parse");
+      let mockParse = require('./parse');
       data = mockParse(data);
     }
     if (!RESPONSE_TIME) {
@@ -69,7 +69,7 @@ function createProxy(method, path, target) {
       if (matches.length > 1) {
         matchPath = matches[1];
       }
-      return join(url.parse(target).path, matchPath).replace(/\\/g, "/");
+      return join(url.parse(target).path, matchPath).replace(/\\/g, '/');
     },
   });
 }
@@ -77,11 +77,11 @@ function createProxy(method, path, target) {
 function realApplyMock() {
   const config = getConfig();
   if (
-    config["*"] &&
-    typeof config["*"] === "string" &&
-    config["*"].indexOf("http") === 0
+    config['*'] &&
+    typeof config['*'] === 'string' &&
+    config['*'].indexOf('http') === 0
   ) {
-    APP.all("/*", proxy(config["*"]));
+    APP.all('/*', proxy(config['*']));
   } else {
     Object.keys(config).forEach(key => {
       const { method, path } = parseKey(key);
@@ -89,10 +89,10 @@ function realApplyMock() {
       const typeVal = typeof val;
       assert(!!APP[method], `method of ${key} is not valid`);
       assert(
-        ["function", "object", "string"].includes(typeVal),
+        ['function', 'object', 'string'].includes(typeVal),
         `mock value of ${key} should be function or object or string, but got ${typeVal}`
       );
-      if (typeVal === "string") {
+      if (typeVal === 'string') {
         // url转发的情形  /api/test  =>   https://www.xxx.com/api/test
         if (/\(.+\)/.test(path)) {
           path = new RegExp(`^${path}$`);
@@ -106,15 +106,15 @@ function realApplyMock() {
 
   let lastIndex = null;
   APP._router.stack.some((item, index) => {
-    if (item.name === "HelloEasyMockMiddleware") {
+    if (item.name === 'HelloEasyMockMiddleware') {
       lastIndex = index;
       return true;
     }
   });
 
-  watcher = WATCH(MOCK_FILES).on("change add unlink", (type, fsPath) => {
+  watcher = WATCH(MOCK_FILES).on('change add unlink', (type, fsPath) => {
     log.info(`File changed(${type}):${fsPath}`);
-    if (type === "add") initMockFile(fsPath);
+    if (type === 'add') initMockFile(fsPath);
     watcher.close();
     APP._router.stack.splice(lastIndex + 1);
     applyMock();
@@ -126,7 +126,7 @@ function parseKey(key) {
   let [method, path] = arr;
   if (!path) {
     path = method;
-    method = "get";
+    method = 'get';
   }
   return { method, path };
 }
@@ -135,7 +135,7 @@ function parseKey(key) {
  * @param {*} filePath
  */
 function initMockFile(filePath) {
-  if (!fs.readFileSync(filePath, { encoding: "utf8" })) {
+  if (!fs.readFileSync(filePath, { encoding: 'utf8' })) {
     fs.writeFileSync(
       filePath,
       `module.exports = {
@@ -151,11 +151,11 @@ function applyMock() {
   } catch (e) {
     handleError(e);
     log.err(e);
-    utils.log("Error:" + e.message);
+    utils.log('Error:' + e.message);
     utils.showLog();
-    watcher = WATCH(MOCK_FILES).on("change add unlink", (type, fsPath) => {
+    watcher = WATCH(MOCK_FILES).on('change add unlink', (type, fsPath) => {
       log.info(`File changed(${type}):${fsPath}`);
-      if (type === "add") initMockFile(fsPath);
+      if (type === 'add') initMockFile(fsPath);
       watcher.close();
       applyMock();
     });
@@ -171,12 +171,12 @@ function applyMock() {
 
 function startMock(app, mockPath, enableParse, watch, apiResponseTime) {
   MOCK_DIR = mockPath;
-  MOCK_FILES = join(mockPath, "*.js");
+  MOCK_FILES = join(mockPath, '/**/*.js');
   ENABLE_PARSE = enableParse;
   APP = app;
   RESPONSE_TIME = apiResponseTime;
   WATCH = watch;
-  if (!MOCK_DIR || !APP || !WATCH) throw Error("arguments error");
+  if (!MOCK_DIR || !APP || !WATCH) throw Error('arguments error');
   applyMock();
   return function(errorHandle) {
     ERROR_HANDLE = errorHandle;
