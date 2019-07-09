@@ -1,6 +1,13 @@
-const vscode = require("vscode");
+const vscode = require('vscode');
 
-const console = vscode.window.createOutputChannel("EasyMock");
+const console = vscode.window.createOutputChannel('EasyMock');
+
+function showPick(msg, optional) {
+  return vscode.window.showQuickPick(optional, {
+    placeHolder: msg,
+    ignoreFocusOut: true,
+  });
+}
 
 exports.log = function(msg) {
   console.appendLine(msg);
@@ -10,14 +17,23 @@ exports.showLog = function() {
   console.show();
 };
 
-exports.getWorkspaceRoot = function() {
+exports.getWorkspaceRoot = async function(showMsgWhenNeedUserSelect) {
   const { workspaceFolders } = vscode.workspace;
   if (!workspaceFolders) return;
-  const [rootPath] = workspaceFolders;
-  const {
-    uri: { fsPath },
-  } = rootPath;
-  return fsPath;
+  if (workspaceFolders.length === 1) {
+    const [rootPath] = workspaceFolders;
+    const {
+      uri: { fsPath },
+    } = rootPath;
+    return fsPath;
+  } else {
+    const workspaces = workspaceFolders.reduce((acc, cur) => {
+      acc[cur.name] = cur.uri.fsPath;
+      return acc;
+    }, {});
+    const userSelect = await showPick(showMsgWhenNeedUserSelect, [...Object.keys(workspaces)]);
+    return workspaces[userSelect] || workspaceFolders[0].uri.fsPath;
+  }
 };
 
 exports.showInfo = function(msg) {
@@ -34,43 +50,36 @@ exports.showInput = function(prompt) {
   });
 };
 
-exports.showPick = function(msg, optional) {
-  return vscode.window.showQuickPick(optional, {
-    placeHolder: msg,
-    ignoreFocusOut: true,
-  });
-};
+exports.showPick = showPick;
 
 exports.getPort = function() {
-  return getConfig("serverPort");
+  return getConfig('serverPort');
 };
 
 exports.getMockFolder = function() {
-  return getConfig("mockFolderName");
+  return getConfig('mockFolderName');
 };
 
 exports.getCorsHeaders = function() {
-  return getConfig("corsHeaders");
+  return getConfig('corsHeaders');
 };
 
 exports.isEnableMockParse = function() {
-  return getConfig("mockParse");
+  return getConfig('mockParse');
 };
 
 exports.isEnableHelloPage = function() {
-  return getConfig("helloPage");
+  return getConfig('helloPage');
 };
 
 exports.getResponseTime = function() {
-  return getConfig("responseTime");
+  return getConfig('responseTime');
 };
 
 function getConfig(configName) {
-  return vscode.workspace.getConfiguration("EasyMock").get(configName);
+  return vscode.workspace.getConfiguration('EasyMock').get(configName);
 }
 
 function updateConfig(configName, configValue) {
-  return vscode.workspace
-    .getConfiguration("EasyMock")
-    .update(configName, configValue);
+  return vscode.workspace.getConfiguration('EasyMock').update(configName, configValue);
 }

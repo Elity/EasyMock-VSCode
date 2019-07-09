@@ -12,9 +12,7 @@ function randomHz() {
 }
 
 function randomZm() {
-  return String.fromCharCode(
-    Math.random() > 0.5 ? randomInt(65, 91) : randomInt(97, 123)
-  );
+  return String.fromCharCode(Math.random() > 0.5 ? randomInt(65, 91) : randomInt(97, 123));
 }
 
 function repeatStrFn(fn, times, joinStr = '') {
@@ -81,10 +79,7 @@ const fns = {
     return base;
   },
   color() {
-    return (
-      '#' +
-      ('00000' + ((0xffffff * Math.random() + 1) | 0).toString(16)).slice(-6)
-    );
+    return '#' + ('00000' + ((0xffffff * Math.random() + 1) | 0).toString(16)).slice(-6);
   },
   time(future = false) {
     return future
@@ -144,13 +139,7 @@ const fns = {
   },
   ip() {
     return (
-      this.num(0, 255) +
-      '.' +
-      this.num(0, 255) +
-      '.' +
-      this.num(0, 255) +
-      '.' +
-      this.num(0, 255)
+      this.num(0, 255) + '.' + this.num(0, 255) + '.' + this.num(0, 255) + '.' + this.num(0, 255)
     );
   },
   phone() {
@@ -204,11 +193,7 @@ let typeParse = {
       group2, //group2 fn
       group3 //group3 (arg)
     ) {
-      return fns[group2]
-        ? group3
-          ? eval(`fns.${group1}`)
-          : eval(`fns.${group1}()`)
-        : match;
+      return fns[group2] ? (group3 ? eval(`fns.${group1}`) : eval(`fns.${group1}()`)) : match;
     });
     if (!des) return data;
     return data.repeat(randomInt(des.min, des.max));
@@ -230,8 +215,8 @@ function parse(data, des) {
     if (tp === 'array') {
       let len = randomInt(des.min, des.max);
       if (len <= 0) return [];
-      let arr = [],
-        dataLen = data.length;
+      let arr = [];
+      let dataLen = data.length;
       while (arr.length < len) {
         let item = data[randomInt(0, dataLen)],
           des;
@@ -243,10 +228,9 @@ function parse(data, des) {
     if (typeof data === 'object') {
       let len = randomInt(des.min, des.max);
       if (len <= 0) return {};
-      let obj = {},
-        count = 0,
-        parsedData = parse(data); // 先解析再pick
-      keys = Object.keys(parsedData);
+      let obj = {};
+      let parsedData = parse(data); // 先解析再pick
+      let keys = Object.keys(parsedData);
       len = Math.min(len, keys.length); // 长度超出key的数量没意义，会被覆盖
       keys.sort(() => (Math.random() > 0.5 ? 1 : -1));
       keys.slice(0, len).forEach(key => (obj[key] = parsedData[key]));
