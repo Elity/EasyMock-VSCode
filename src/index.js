@@ -1,17 +1,18 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 
-const fs = require("fs");
-const opn = require("opn");
-const path = require("path");
-const log = require("./log");
-const i18n = require("./i18n");
-const mock = require("./mock");
-const vscode = require("vscode");
-const utils = require("./utils");
-const watch = require("./watch");
-const server = require("./server");
-const mw = require("./middleware");
+const fs = require('fs');
+const opn = require('opn');
+const path = require('path');
+const detect = require('detect-port');
+const log = require('./log');
+const i18n = require('./i18n');
+const mock = require('./mock');
+const vscode = require('vscode');
+const utils = require('./utils');
+const watch = require('./watch');
+const server = require('./server');
+const mw = require('./middleware');
 
 const lang = i18n(vscode.env.language);
 // this method is called when your extension is activated
@@ -24,10 +25,10 @@ function activate(context) {
   // Now provide the implementation of the command with  registerCommand
   // The commandId parameter must match the command field in package.json
   context.subscriptions.push(
-    vscode.commands.registerCommand("easymock.runMcok", function() {
+    vscode.commands.registerCommand('easymock.runMcok', async function() {
       if (running) return;
       running = true;
-      const rootPath = utils.getWorkspaceRoot();
+      const rootPath = await utils.getWorkspaceRoot(lang.userSelectWorkSpace);
       if (!rootPath) {
         utils.showError(lang.noWorkspace);
         return;
@@ -35,31 +36,37 @@ function activate(context) {
       const mockPath = path.join(rootPath, utils.getMockFolder());
       if (!fs.existsSync(mockPath)) {
         fs.mkdirSync(mockPath);
-        require("./example")(mockPath);
+        require('./example')(mockPath);
         utils.showInfo(lang.createMockFolder);
       }
-      server
-        .start(utils.getWorkspaceRoot(), utils.getPort())
+      let port = utils.getPort();
+      detect(port)
+        .then(newPort => {
+          if (newPort != port) {
+            return utils
+              .showPick(lang.portOccupied + port, [lang.tryPort + newPort, lang.giveupPort + port])
+              .then(sel => (sel === lang.tryPort + newPort ? (port = newPort) : port));
+          } else {
+            return port;
+          }
+        })
+        .then(port => server.start(rootPath, port))
         .then(app => {
-          const helloPath = "/hello/easymock";
-          const mockPath = path.join(
-            utils.getWorkspaceRoot(),
-            utils.getMockFolder()
-          );
+          const helloPath = '/hello/easymock';
+          const mockPath = path.join(rootPath, utils.getMockFolder());
           app.use(mw.corsMiddleware(utils.getCorsHeaders()));
           app.use(helloPath, mw.HelloEasyMockMiddleware());
-          mock.startMock(app, mockPath, utils.isEnableMockParse(), watch)(
+          mock.startMock(app, mockPath, utils.isEnableMockParse(), watch, utils.getResponseTime())(
             err => {
               let errStr = err.stack
-                .split("\n")
+                .split('\n')
                 .splice(0, 4)
-                .join("\n");
+                .join('\n');
               utils.log(errStr);
               utils.showError(errStr);
             }
           );
-          utils.isEnableHelloPage() &&
-            opn("http://127.0.0.1:" + utils.getPort() + helloPath);
+          utils.isEnableHelloPage() && opn('http://127.0.0.1:' + port + helloPath);
 
           utils.showInfo(lang.startSuccess);
         })
@@ -72,7 +79,7 @@ function activate(context) {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("easymock.stopMcok", function() {
+    vscode.commands.registerCommand('easymock.stopMcok', function() {
       if (!running) return;
       server
         .stop()

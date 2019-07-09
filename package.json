@@ -2,7 +2,7 @@
   "name": "easymock",
   "displayName": "EasyMock - Mock server",
   "description": "a simple mock server for VSCode",
-  "version": "1.0.9",
+  "version": "1.0.13",
   "publisher": "EasyMock",
   "author": "Fighting",
   "license": "MIT",
@@ -64,6 +64,11 @@
           "type": "boolean",
           "default": true,
           "description": "Enable hello page on start"
+        },
+        "EasyMock.responseTime": {
+          "type": "number",
+          "default": 0,
+          "description": "Set response time"
         }
       }
     }
@@ -85,6 +90,7 @@
     "body-parser": "^1.18.2",
     "chalk": "^2.3.2",
     "chokidar": "^2.0.3",
+    "detect-port": "^1.2.2",
     "express": "^4.16.3",
     "express-http-proxy": "^1.1.0",
     "glob": "^7.1.2",

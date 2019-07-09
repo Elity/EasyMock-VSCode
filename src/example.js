@@ -1,9 +1,9 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
 module.exports = function(mockPath) {
   fs.writeFileSync(
-    path.join(mockPath, "example.js"),
+    path.join(mockPath, 'example.js'),
     `
   module.exports = {
       // 默认get请求
@@ -11,19 +11,19 @@ module.exports = function(mockPath) {
           name: '张三',
           age: 28
       },
-      // 指定请求方式
+      // 指定请求方式为post
       'post /api/changeInfo':{
           message: 'success',
           status: 0
       },
       // 可以写成function的形式，从而可以根据请求参数定制响应数据
       '/api/getOrder':function(res){
-          //res.query
-          //res.params
-          //res.body
+          //res.query  获取get请求参数
+          //res.body   获取post请求参数
           return {
               orderId:1214124124,
-              price: Math.random()
+              price: Math.random(),
+              userName: fns => fns.str(2,4)    // 如果启用了内置mock，依然可以使用内置mock函数
           }
       },
       // 也可以转发url到指定的服务器

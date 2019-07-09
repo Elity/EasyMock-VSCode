@@ -9,6 +9,7 @@ A vscode extension for mock data
 * `EasyMock.mockParse`: Enable build-in mock parse
 * `EasyMock.helloPage`: Enable hello page on start
 * `EasyMock.corsHeaders`: Customize header names
+* `EasyMock.responseTime`：Set response time
 
 ## Usage
 
@@ -92,6 +93,26 @@ After select `EasyMock: Run EasyMock`,to view the example file at `{workspace}/{
 }
 ```
 
+#### function
+
+```
+{
+    age: function(){
+        return 18
+    },
+    name: function(buildInFns){
+        return buildInFns.cstr(2,4)
+    },
+    id: buildInFns=>buildInFns.inc(100)
+}
+
+{
+    age: 18,
+    name: '张三',
+    id: 109
+}
+```
+
 ### build-in placeholder function
 
 * `str(min = 1, max = 10)` random string
@@ -105,6 +126,12 @@ After select `EasyMock: Run EasyMock`,to view the example file at `{workspace}/{
 * `paragraph(min = 1, max = 5)` generate paragraph
 * `cparagraph(min = 1, max = 5)` generate chinese paragraph
 * `pick([1,2,3,4,5])` pick a element from array or arguments
+* `url()` generate url
+* `email()` generate email
+* `host()` generate host
+* `ip()` generate ip
+* `phone()` generate phone
+* `qq()` generate qq
 
 #### usage
 
